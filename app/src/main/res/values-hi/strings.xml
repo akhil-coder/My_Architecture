@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">होम</string>
+    <string name="profile">प्रोफ़ाइल</string>
+    <string name="my_movies">मेरी फिल्में</string>
+    <string name="settings">सेटिंग</string>
+    <string name="movie_app">मूवी ऐप</string>
+    <string name="logout_confirmation">लॉगआउट पुष्टि</string>
+    <string name="logout_confirmation_message">क्या आप लॉग आउट करना चाहते हैं?</string>
+    <string name="utils">Utils</string>
+</resources>

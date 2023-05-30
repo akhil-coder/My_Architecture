@@ -1,0 +1,37 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "My Architecture"
+include ':app'
+include ':core'
+include ':components'
+include ':constants'
+include ':preferences'
+include ':navigation'
+
+include ':business'
+include ':business:datasource'
+include ':business:domain'
+include ':business:interactors'
+
+include ':features'
+include ':features:movie'
+include ':features:ui-main'
+include ':features:myList'
+include ':features:auth'
+include ':features:profile'
+
+include ':features:tvShow'
+
+
