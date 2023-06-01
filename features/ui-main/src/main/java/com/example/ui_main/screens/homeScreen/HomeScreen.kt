@@ -1,16 +1,22 @@
 package com.example.ui_main.screens.homeScreen
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -21,10 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ui_main.R
 import com.example.ui_main.screens.util.ButtonBlue
-import com.example.ui_main.screens.util.DeepBlue
 import com.example.ui_main.screens.util.LightRed
 
 @Composable
@@ -32,11 +38,54 @@ fun HomeScreen(navigateToTvShows: () -> Unit) {
 
     Box(
         modifier = Modifier
-            .background(DeepBlue)
+            .background(Color.White)
             .fillMaxSize()
     ) {
         Column {
             CurrentMeditation(navigateToTvShows)
+            Spacer(modifier = Modifier.height(16.dp))
+            TilesSection(navigateToTvShows)
+        }
+    }
+}
+
+@Composable
+fun TilesSection(onClick: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        ItemTiles("Movies", R.drawable.baseline_movie_24, onClick)
+        ItemTiles("Tv Shows", R.drawable.baseline_live_tv_24, onClick)
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ItemTiles(
+    tileName: String = "Name",
+    @DrawableRes iconId: Int = R.drawable.baseline_movie_24,
+    onClick: () -> Unit
+) {
+    Card(modifier = Modifier
+        .padding(10.dp)
+        .defaultMinSize(minWidth = 150.dp, minHeight = 150.dp),
+        elevation = 4.dp,
+        onClick = {
+            onClick()
+        }) {
+        Column(
+            modifier = Modifier,
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                painter = painterResource(id = iconId),
+                contentDescription = "Tile Item",
+                modifier = Modifier.size(24.dp)
+            )
+            Text(text = tileName, style = MaterialTheme.typography.h5)
         }
     }
 }
