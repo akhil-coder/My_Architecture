@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
@@ -19,16 +18,12 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.ImageLoader
-import com.example.components.buttons.CustomButton
 import com.example.components.dialogs.ConfirmDialog
 import com.example.components.drawer.AppBarDrawer
 import com.example.components.drawer.DrawerBody
@@ -41,7 +36,7 @@ import com.example.navigation.screens.*
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainNavigation(
+fun MainScreen(
     navController: NavHostController,
     imageLoader: ImageLoader,
     navigationProvider: NavigationProvider,
@@ -63,7 +58,7 @@ fun MainNavigation(
     val items = listOf(
         BottomNavItem(
             name = stringResource(R.string.home),
-            route = MovieScreen.MovieList.route,
+            route = TvShowScreen.TvShow.route,
             icon = Icons.Default.Home,
         ),
         BottomNavItem(
@@ -77,7 +72,7 @@ fun MainNavigation(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            if (currentDestination?.route == MovieScreen.MovieList.route) {
+            if (currentDestination?.route == TvShowScreen.TvShow.route) {
                 AppBarDrawer(
                     title = stringResource(R.string.movie_app)
                 ) {
@@ -93,7 +88,7 @@ fun MainNavigation(
                 navController = navController,
                 onItemClick = {
                     navController.navigate(it.route) {
-                        popUpTo(route = MovieScreen.MovieList.route)
+                        popUpTo(route = TvShowScreen.TvShow.route)
                         launchSingleTop = true
                     }
                 }
@@ -138,9 +133,11 @@ fun MainNavigation(
                         "myList" -> {
                             navController.navigate(route = MyMoviesScreen.MyMovies.route)
                         }
+
                         "settings" -> {
                             navController.navigate(route = MainScreen.Settings.route)
                         }
+
                         "utils" -> {
                             navController.navigate(route = MainScreen.Utils.route)
                         }
@@ -178,7 +175,7 @@ fun MainNavigation(
                     }) {
 
                     navController.navigate(route = AuthScreen.Login.route) {
-                        popUpTo(route = MovieScreen.MovieList.route) {
+                        popUpTo(route = TvShowScreen.TvShow.route) {
                             inclusive = true
                         }
                     }
@@ -205,7 +202,7 @@ fun BottomNavigationBar(
 ) {
 
     val screens = listOf(
-        MovieScreen.MovieList.route,
+        TvShowScreen.TvShow.route,
         ProfileScreen.Profile.route
     )
 
@@ -269,7 +266,6 @@ fun BottomNavigationBar(
             }
         }
     }
-
 }
 
 class NavShape(

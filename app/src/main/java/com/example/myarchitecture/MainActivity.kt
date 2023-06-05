@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             AppContent(viewModel) {
                 val navController = rememberAnimatedNavController()//rememberNavController()
-                MainNavigation(
+                MainScreen(
                     navController = navController,
                     imageLoader = imageLoader,
                     navigationProvider = navigationProvider,
@@ -78,8 +78,7 @@ fun AppContent(viewModel: MainAppViewModel, content: @Composable () -> Unit) {
         }
 
         Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
+            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
         ) {
             content()
         }

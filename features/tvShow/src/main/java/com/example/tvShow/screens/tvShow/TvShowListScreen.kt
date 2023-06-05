@@ -42,7 +42,7 @@ fun TvShowListScreen(
     state: TvShowListState,
     event: (TvShowListEvents) -> Unit,
     navigateToDetailsScreen: ((String) -> Unit)? = null,
-    savedStateHandle: SavedStateHandle?,
+    savedStateHandle: SavedStateHandle?
 ) {
     DefaultScreenUI(
         networkStatus = networkStatus.value, queue = state.errorQueue, onRemoveHeadFromQueue = {
