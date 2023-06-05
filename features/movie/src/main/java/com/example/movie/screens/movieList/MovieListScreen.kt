@@ -182,6 +182,4 @@ fun movieList(
             }
         }
     }
-
-
 }
