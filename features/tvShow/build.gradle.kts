@@ -1,4 +1,4 @@
-apply{
+apply {
     from("$rootDir/android-library-build.gradle")
 }
 
@@ -16,6 +16,11 @@ dependencies {
     //Coil
     "implementation"(Coil.coil)
 
-    //icon
-    "implementation" (Compose.icons)
+    //Icon
+    "implementation"(Compose.icons)
+
+    // Pagination
+    "implementation"(Paging.paging)
+    "implementation"(Paging.pagingCompose)
+
 }

@@ -9,9 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -28,7 +29,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
+import androidx.paging.compose.items
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -42,7 +49,7 @@ fun TvShowListScreen(
     state: TvShowListState,
     event: (TvShowListEvents) -> Unit,
     navigateToDetailsScreen: ((String) -> Unit)? = null,
-    savedStateHandle: SavedStateHandle?
+    savedStateHandle: SavedStateHandle?,
 ) {
     DefaultScreenUI(
         networkStatus = networkStatus.value, queue = state.errorQueue, onRemoveHeadFromQueue = {
@@ -64,8 +71,12 @@ fun TvShowList(
     state: TvShowListState,
     imageLoader: ImageLoader,
     navigateToDetailsScreen: ((String) -> Unit)? = null,
-    event: (TvShowListEvents) -> Unit
+    event: (TvShowListEvents) -> Unit,
+    viewModel: TvShowListViewModel = hiltViewModel()
 ) {
+
+    val discoverTvShow = viewModel.discoverTvShowStream.collectAsLazyPagingItems()
+
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(150.dp),
         modifier = Modifier
@@ -74,8 +85,13 @@ fun TvShowList(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalItemSpacing = 12.dp
     ) {
-        items(state.tvShows) { item ->
-            tvShowListItem(item)
+        items(
+            count = discoverTvShow.itemCount,
+            key = discoverTvShow.itemKey(),
+            contentType = discoverTvShow.itemContentType()
+        ) { index ->
+            val item = discoverTvShow[index]
+            tvShowListItem(item!!)
         }
     }
 }

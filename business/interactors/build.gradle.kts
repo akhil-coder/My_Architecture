@@ -8,4 +8,6 @@ dependencies {
     "implementation"(project(Modules.datasource))
     "implementation"(project(Modules.core))
 
+    "implementation"(Paging.paging)
+
 }
