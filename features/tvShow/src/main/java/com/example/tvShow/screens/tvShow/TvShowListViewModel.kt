@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.core.domain.DataState
+import androidx.paging.cachedIn
 import com.example.core.domain.UIComponent
 import com.example.core.util.Logger
 import com.example.core.util.exhaustive
@@ -28,6 +28,9 @@ class TvShowListViewModel @Inject constructor(
     private val _tvShowListState = mutableStateOf(TvShowListState())
     val tvShowListStateState: State<TvShowListState> = _tvShowListState
 
+    val discoverTvShowStream =
+        tvShowInteractor.discoverTvShow.getDiscoverMovieStream().cachedIn(viewModelScope)
+
     init {
         connectivityObserver.observe().onEach {
             if (it == ConnectivityObserver.Status.Available && _tvShowListState.value.tvShows.isEmpty()) {
@@ -39,7 +42,6 @@ class TvShowListViewModel @Inject constructor(
     fun onEventChange(events: TvShowListEvents) {
         when (events) {
             TvShowListEvents.DiscoverTvShows -> {
-                discoverTvShow()
             }
 
             TvShowListEvents.OnRemoveHeadFromQueue -> {
@@ -56,41 +58,41 @@ class TvShowListViewModel @Inject constructor(
         }.exhaustive
     }
 
-    private fun discoverTvShow() {
-        tvShowInteractor.discoverTvShow().onEach { dataState ->
-            when (dataState) {
-                is DataState.Data -> {
-                    _tvShowListState.value = tvShowListStateState.value.copy(
-                        tvShows = dataState.data?.shuffled() ?: listOf()
-                    )
-                    logger.log("Movie list size: ${tvShowListStateState.value.tvShows.size}")
-                }
+    /*  private fun discoverTvShow() {
+          tvShowInteractor.discoverTvShow().onEach { dataState ->
+              when (dataState) {
+                  is DataState.Data -> {
+                      _tvShowListState.value = tvShowListStateState.value.copy(
+                          tvShows = dataState.data?.shuffled() ?: listOf()
+                      )
+                      logger.log("Movie list size: ${tvShowListStateState.value.tvShows.size}")
+                  }
 
-                is DataState.Loading -> {
-                    _tvShowListState.value = tvShowListStateState.value.copy(
-                        progressBarState = dataState.progressBarState
-                    )
-                }
+                  is DataState.Loading -> {
+                      _tvShowListState.value = tvShowListStateState.value.copy(
+                          progressBarState = dataState.progressBarState
+                      )
+                  }
 
-                is DataState.Response -> {
-                    when (dataState.uiComponent) {
-                        is UIComponent.Dialog -> {
-                            addToMessageQueue(dataState.uiComponent)
-                            logger.log((dataState.uiComponent as UIComponent.Dialog).description)
-                        }
+                  is DataState.Response -> {
+                      when (dataState.uiComponent) {
+                          is UIComponent.Dialog -> {
+                              addToMessageQueue(dataState.uiComponent)
+                              logger.log((dataState.uiComponent as UIComponent.Dialog).description)
+                          }
 
-                        is UIComponent.None -> {
-                            logger.log((dataState.uiComponent as UIComponent.None).message)
-                        }
+                          is UIComponent.None -> {
+                              logger.log((dataState.uiComponent as UIComponent.None).message)
+                          }
 
-                        is UIComponent.SnackBar -> {
+                          is UIComponent.SnackBar -> {
 
-                        }
-                    }.exhaustive
-                }
-            }.exhaustive
-        }.launchIn(viewModelScope)
-    }
+                          }
+                      }.exhaustive
+                  }
+              }.exhaustive
+          }.launchIn(viewModelScope)
+      }*/
 
     private fun addToMessageQueue(uiComponent: UIComponent) {
         val queue = tvShowListStateState.value.errorQueue

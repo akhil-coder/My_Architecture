@@ -69,7 +69,6 @@ dependencies {
     implementation(project(Modules.feature_profile))
     implementation(project(Modules.feature_myList))
 
-
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.appCompat)
     implementation(AndroidX.lifecycleRunKtx)

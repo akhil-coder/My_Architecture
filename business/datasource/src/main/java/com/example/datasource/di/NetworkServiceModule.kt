@@ -2,9 +2,7 @@ package com.example.datasource.di
 
 import com.example.datasource.network.WebService
 import com.example.datasource.network.networkService.MovieNetworkServiceImpl
-import com.example.datasource.network.networkService.TvShowNetworkServiceImpl
 import com.example.domain.service.network.MovieNetworkService
-import com.example.domain.service.network.TvShowNetworkService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +19,7 @@ object NetworkServiceModule {
         MovieNetworkServiceImpl(webService)
 
 
-    @Singleton
-    @Provides
-    fun provideTvNetworkService(webService: WebService): TvShowNetworkService = TvShowNetworkServiceImpl(webService)
+//    @Singleton
+//    @Provides
+//    fun provideTvNetworkService(webService: WebService): TvShowNetworkService = TvShowNetworkServiceImpl(webService)
 }

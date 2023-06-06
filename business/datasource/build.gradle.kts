@@ -1,4 +1,4 @@
-apply{
+apply {
     from("$rootDir/android-library-build.gradle")
 }
 
@@ -10,6 +10,13 @@ dependencies {
     "implementation"(Retrofit.retrofit)
     "implementation"(Retrofit.gsonConvertor)
     "implementation"(Retrofit.okHttp)
+    "implementation"(Retrofit.loggingInterceptor)
+
+
+    // Paging
+    "implementation"(Paging.paging)
+    "implementation"(Paging.pagingCompose)
+
 
     //Room
     "implementation"(Room.runtime)
