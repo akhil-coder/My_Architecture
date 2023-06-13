@@ -63,6 +63,4 @@ object AppModule {
             myListNavigation = myListNavigation
         )
     }
-
-
 }

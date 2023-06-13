@@ -9,10 +9,8 @@ import com.example.core.domain.DataState
 import com.example.core.domain.UIComponent
 import com.example.core.util.Logger
 import com.example.core.util.exhaustive
-import com.example.domain.model.movieDetails.MovieDetails
-import com.example.interactors.favotite.FavoriteInteractor
+import com.example.interactors.favorite.FavoriteInteractor
 import com.example.interactors.movies.MovieInteractor
-import com.example.movie.screens.movieList.MovieListEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -116,7 +114,6 @@ class MovieDetailsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-
     private fun addToMessageQueue(uiComponent: UIComponent) {
         val queue = detailsState.value.errorQueue
         queue.add(uiComponent)
@@ -124,8 +121,6 @@ class MovieDetailsViewModel @Inject constructor(
             errorQueue = queue
         )
     }
-
-
 }
 
 sealed class MovieDetailsEvents {

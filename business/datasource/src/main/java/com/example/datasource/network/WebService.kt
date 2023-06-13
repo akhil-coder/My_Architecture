@@ -1,8 +1,9 @@
 package com.example.datasource.network
 
+import com.example.datasource.network.model.homeUi.HomeUiResponse
 import com.example.datasource.network.model.movieDetails.MovieDetailsResponse
 import com.example.datasource.network.model.movieList.MovieListResponse
-import com.example.datasource.network.tvList.TvListResponse
+import com.example.datasource.network.model.tvList.TvListResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -19,13 +20,13 @@ interface WebService {
     @GET("movie/popular")
     suspend fun getMovies(
         @Query("api_key") api_key: String = "b84284a74a0341ff34f03a54cbefd84f",
-    ) : Response<MovieListResponse>
+    ): Response<MovieListResponse>
 
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") movie_id: String,
         @Query("api_key") api_key: String = "b84284a74a0341ff34f03a54cbefd84f",
-    ) : Response<MovieDetailsResponse>
+    ): Response<MovieDetailsResponse>
 
     @GET("discover/tv")
     suspend fun discoverTvShows(
@@ -33,4 +34,6 @@ interface WebService {
         @Query("page") page: Int = 1
     ): Response<TvListResponse>
 
+    @GET("main_paige")
+    suspend fun getHomeUi(): Response<HomeUiResponse>
 }

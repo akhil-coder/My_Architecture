@@ -1,12 +1,31 @@
 package com.example.myarchitecture
 
 import android.util.Log
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Badge
+import androidx.compose.material.BadgedBox
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +38,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -32,7 +55,11 @@ import com.example.components.util.MenuItem
 import com.example.myarchitecture.navigation.AppNavGraph
 import com.example.myarchitecture.navigation.BottomNavItem
 import com.example.myarchitecture.navigation.NavigationProvider
-import com.example.navigation.screens.*
+import com.example.navigation.screens.AuthScreen
+import com.example.navigation.screens.MainScreen
+import com.example.navigation.screens.MyMoviesScreen
+import com.example.navigation.screens.ProfileScreen
+import com.example.navigation.screens.TvShowScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -58,7 +85,7 @@ fun MainScreen(
     val items = listOf(
         BottomNavItem(
             name = stringResource(R.string.home),
-            route = TvShowScreen.TvShow.route,
+            route = MainScreen.HomeScreen.route,
             icon = Icons.Default.Home,
         ),
         BottomNavItem(
@@ -202,7 +229,7 @@ fun BottomNavigationBar(
 ) {
 
     val screens = listOf(
-        TvShowScreen.TvShow.route,
+        MainScreen.HomeScreen.route,
         ProfileScreen.Profile.route
     )
 

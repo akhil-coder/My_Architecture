@@ -40,8 +40,8 @@ fun MovieListScreen(
     networkStatus : MutableState<Boolean>,
     state: MovieListState,
     event: (MovieListEvents) -> Unit,
-    navigateToDetailsScreen: (String) -> Unit,
     savedStateHandle: SavedStateHandle?,
+    navigateToDetailsScreen: (String) -> Unit,
 ) {
 
     if (savedStateHandle != null) {

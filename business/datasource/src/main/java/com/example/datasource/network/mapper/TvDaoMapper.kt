@@ -1,6 +1,6 @@
 package com.example.datasource.network.mapper
 
-import com.example.datasource.network.tvList.TvListResponse
+import com.example.datasource.network.model.tvList.TvListResponse
 import com.example.domain.model.tvList.TvShow
 
 fun TvListResponse.toDomainTvList(): List<TvShow> {

@@ -10,7 +10,7 @@ import com.example.core.domain.UIComponent
 import com.example.core.util.Logger
 import com.example.core.util.exhaustive
 import com.example.domain.model.movieDetails.MovieDetails
-import com.example.interactors.favotite.FavoriteInteractor
+import com.example.interactors.favorite.FavoriteInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
