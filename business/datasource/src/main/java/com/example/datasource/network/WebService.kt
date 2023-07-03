@@ -1,6 +1,5 @@
 package com.example.datasource.network
 
-import com.example.datasource.network.model.homeUi.HomeUiResponse
 import com.example.datasource.network.model.movieDetails.MovieDetailsResponse
 import com.example.datasource.network.model.movieList.MovieListResponse
 import com.example.datasource.network.model.tvList.TvListResponse
@@ -33,7 +32,4 @@ interface WebService {
         @Header("Authorization") auth_key: String = NetworkConstants.auth,
         @Query("page") page: Int = 1
     ): Response<TvListResponse>
-
-    @GET("main_paige")
-    suspend fun getHomeUi(): Response<HomeUiResponse>
 }

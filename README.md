@@ -8,6 +8,7 @@ This is a project template
 
 ### Screens
 
+
 - Splash Screen
 - Login/Signup
 - Movie List

@@ -2,6 +2,7 @@ package com.example.datasource.network.networkService
 
 import com.example.core.domain.DataState
 import com.example.core.domain.UIComponent
+import com.example.datasource.network.ServerUiService
 import com.example.datasource.network.WebService
 import com.example.datasource.network.mapper.toDomainHomeUi
 import com.example.domain.model.homeUi.HomeUi
@@ -11,12 +12,12 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class HomeUiNetworkServiceImpl @Inject constructor(
-    private val webService: WebService
+    private val serverUiService: ServerUiService
 ) : HomeUiNetworkService {
 
     override suspend fun getHomeUi(): Flow<DataState<HomeUi>> = flow {
         try {
-            val response = webService.getHomeUi()
+            val response = serverUiService.getHomeUi()
             if (response.isSuccessful) {
                 emit(DataState.Data(response.body()!!.toDomainHomeUi()))
             } else {

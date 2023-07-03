@@ -75,7 +75,7 @@ fun MovieListScreen(
         progressBarState = state.progressBarState
     ) {
 
-        movieList(
+        MovieList(
             state,
             imageLoader = imageLoader,
             navigateToDetailsScreen,
@@ -104,7 +104,7 @@ fun MovieListScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun movieList(
+fun MovieList(
     state: MovieListState,
     imageLoader: ImageLoader,
     navigateToDetailsScreen: (String) -> Unit,

@@ -1,5 +1,6 @@
 package com.example.datasource.di
 
+import com.example.datasource.network.ServerUiService
 import com.example.datasource.network.WebService
 import com.example.datasource.network.networkService.HomeUiNetworkServiceImpl
 import com.example.datasource.network.networkService.MovieNetworkServiceImpl
@@ -22,8 +23,8 @@ object NetworkServiceModule {
 
     @Singleton
     @Provides
-    fun provideHomeUiNetworkService(webService: WebService): HomeUiNetworkService =
-        HomeUiNetworkServiceImpl(webService)
+    fun provideHomeUiNetworkService(serverUiService: ServerUiService): HomeUiNetworkService =
+        HomeUiNetworkServiceImpl(serverUiService)
 
 //    @Singleton
 //    @Provides

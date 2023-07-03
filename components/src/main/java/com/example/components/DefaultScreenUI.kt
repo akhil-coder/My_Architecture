@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 fun DefaultScreenUI(
     networkStatus: Boolean = true,
     appBar:@Composable () -> Unit = {},
+    bottomBar:@Composable () -> Unit = {},
     queue: Queue<UIComponent> = Queue(mutableListOf()),
     permissionQueue: Queue<String> = Queue(mutableListOf()),
     onRemoveHeadFromQueue: () -> Unit = {},
@@ -54,7 +55,8 @@ fun DefaultScreenUI(
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = appBar
+        topBar = appBar,
+        bottomBar = bottomBar
     ){
         Box(
             modifier = Modifier

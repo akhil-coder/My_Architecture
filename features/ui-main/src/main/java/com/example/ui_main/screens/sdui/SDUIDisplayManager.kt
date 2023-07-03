@@ -8,6 +8,9 @@ import com.example.ui_main.screens.sdui.layoutcontainers.HorizontalScrollable
 import com.example.ui_main.screens.sdui.layoutcontainers.VerticalScrollable
 
 object SDUIDisplayManager {
+
+    lateinit var navigateToTvShows: (() -> Unit)
+
     @Composable
     fun Display(data: Any) {
         when (data) {
@@ -37,7 +40,8 @@ object SDUIDisplayManager {
                 title,
                 description,
                 dataContent.horizontal_padding ?: 0,
-                dataContent.vertical_padding ?: 0
+                dataContent.vertical_padding ?: 0,
+                navigateToTvShows
             )
         }
         "row" -> {
@@ -57,12 +61,6 @@ object SDUIDisplayManager {
     }
 
     @Composable
-    fun RootDisplay(data: List<Any>) {
-        HorizontalScrollable.Display(data)
-        VerticalScrollable.Display(data)
-    }
-
-    @Composable
     fun RootDisplay(response: HomeUi) {
         when (response.view_type) {
             "column" -> {
@@ -74,8 +72,6 @@ object SDUIDisplayManager {
             }
         }
         val list = response.content
-
-
     }
 
 }

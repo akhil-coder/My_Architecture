@@ -47,6 +47,7 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                 val tvShowListViewModel = hiltViewModel<TvShowListViewModel>()
                 Log.e("Network::", "composable : $networkStatus ")
                 TvShowListScreen(
+                    navController = navController,
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,
                     state = tvShowListViewModel.tvShowListStateState.value,

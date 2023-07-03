@@ -46,6 +46,7 @@ fun HomeScreen(
     navigateToTvShows: () -> Unit
 ) {
 
+    SDUIDisplayManager.navigateToTvShows = navigateToTvShows
 
     DefaultScreenUI(
         networkStatus = networkStatus.value, queue = state.errorQueue, onRemoveHeadFromQueue = {
@@ -63,9 +64,9 @@ fun HomeScreen(
                     Modifier.fillMaxSize()
                 ) {
                     item {
-                        state.homeUi?.let { it1 ->
+                        state.homeUi?.let { it ->
                             SDUIDisplayManager.RootDisplay(
-                                it1
+                                it
                             )
                         }
                     }
@@ -74,7 +75,6 @@ fun HomeScreen(
         }
     }
 }
-
 
 @Composable
 fun TilesSection(onClick: () -> Unit) {

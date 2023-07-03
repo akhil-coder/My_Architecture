@@ -20,4 +20,6 @@ object Modules {
     const val feature_myList = ":features:myList"
     const val feature_auth = ":features:auth"
     const val feature_profile = ":features:profile"
+    const val feature_tvShow = ":features:tvShow"
+
 }

@@ -28,7 +28,8 @@ object BigCard {
         buttonTitle: String,
         description: String,
         horizontalPadding: Int,
-        verticalPadding: Int
+        verticalPadding: Int,
+        navigateToTvShows: (() -> Unit)
     ) {
         Column(
             Modifier
@@ -40,11 +41,9 @@ object BigCard {
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-
-                    },
-                elevation = 4.dp,
-
-                ) {
+                        navigateToTvShows()
+                    }, elevation = 4.dp
+            ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -80,6 +79,4 @@ object BigCard {
             }
         }
     }
-
-
 }

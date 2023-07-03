@@ -23,7 +23,6 @@ import com.example.ui_main.screens.util.UtilViewModel
 import com.google.accompanist.navigation.animation.composable
 
 internal object InternalUiMainNavigation : FeatureNavigation {
-
     @OptIn(ExperimentalAnimationApi::class)
     override fun registerGraph(
         navController: NavHostController,

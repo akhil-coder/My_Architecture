@@ -10,6 +10,7 @@ import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.DrawerState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -22,7 +23,9 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -69,7 +72,6 @@ fun MainScreen(
     navigationProvider: NavigationProvider,
     networkStatus: MutableState<Boolean>
 ) {
-
     val context = LocalContext.current
 
     val scaffoldState = rememberScaffoldState()
@@ -87,8 +89,7 @@ fun MainScreen(
             name = stringResource(R.string.home),
             route = MainScreen.HomeScreen.route,
             icon = Icons.Default.Home,
-        ),
-        BottomNavItem(
+        ), BottomNavItem(
             name = stringResource(R.string.profile),
             route = ProfileScreen.Profile.route,
             icon = Icons.Default.Person,
@@ -96,63 +97,65 @@ fun MainScreen(
         )
     )
 
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            if (currentDestination?.route == TvShowScreen.TvShow.route) {
-                AppBarDrawer(
-                    title = stringResource(R.string.movie_app)
-                ) {
-                    scope.launch {
-                        scaffoldState.drawerState.open()
-                    }
+            when (currentDestination?.route) {
+                MainScreen.HomeScreen.route -> {
+                    AppBarDrawer(
+                        title = stringResource(R.string.home_screen), onNavigationItemClick = {
+                            scope.launch {
+                                scaffoldState.drawerState.open()
+                            }
+                        }, onSearchItemClick = null
+                    )
+                }
+
+                TvShowScreen.TvShow.route -> {
+
                 }
             }
         },
         bottomBar = {
-            BottomNavigationBar(
-                items = items,
-                navController = navController,
-                onItemClick = {
-                    navController.navigate(it.route) {
-                        popUpTo(route = TvShowScreen.TvShow.route)
-                        launchSingleTop = true
-                    }
+            BottomNavigationBar(items = items, navController = navController, onItemClick = {
+                navController.navigate(it.route) {
+                    popUpTo(route = TvShowScreen.TvShow.route)
+                    launchSingleTop = true
                 }
-            )
+            })
+
+
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
             DrawerHeader(imageLoader)
-            DrawerBody(
-                items = listOf(
-                    MenuItem(
-                        id = "myList",
-                        title = stringResource(R.string.my_movies),
-                        contentDescription = "Go to my movies screen",
-                        icon = Icons.Default.FavoriteBorder
-                    ),
-                    MenuItem(
-                        id = "settings",
-                        title = stringResource(R.string.settings),
-                        contentDescription = "Go to my settings screen",
-                        icon = Icons.Default.Settings
-                    ),
-                    MenuItem(
-                        id = "utils",
-                        title = stringResource(R.string.utils),
-                        contentDescription = "Go to utils screen",
-                        icon = Icons.Default.Build
-                    ),
+            DrawerBody(items = listOf(
+                MenuItem(
+                    id = "myList",
+                    title = stringResource(R.string.my_movies),
+                    contentDescription = "Go to my movies screen",
+                    icon = Icons.Default.FavoriteBorder
                 ),
-                logOut = {
-                    scope.launch {
-                        scaffoldState.drawerState.close()
-                        isDialogVisible.value = true
-                    }
-
+                MenuItem(
+                    id = "settings",
+                    title = stringResource(R.string.settings),
+                    contentDescription = "Go to my settings screen",
+                    icon = Icons.Default.Settings
+                ),
+                MenuItem(
+                    id = "utils",
+                    title = stringResource(R.string.utils),
+                    contentDescription = "Go to utils screen",
+                    icon = Icons.Default.Build
+                ),
+            ), logOut = {
+                scope.launch {
+                    scaffoldState.drawerState.close()
+                    isDialogVisible.value = true
                 }
-            ) { item ->
+
+            }) { item ->
                 Log.e("DRAWABLE::", "MovieScreen: clicked ${item.title}")
                 scope.launch {
 
@@ -188,8 +191,7 @@ fun MainScreen(
             )
 
             if (isDialogVisible.value) {
-                ConfirmDialog(
-                    isDialogVisible = isDialogVisible.value,
+                ConfirmDialog(isDialogVisible = isDialogVisible.value,
                     title = stringResource(R.string.logout_confirmation),
                     message = stringResource(R.string.logout_confirmation_message),
                     positiveButtonText = stringResource(com.example.ui_main.R.string.ok),
@@ -207,8 +209,7 @@ fun MainScreen(
                         }
                     }
                     isDialogVisible.value = false
-                }
-                /*ShowLogoutConfirmationDialog(isDialogVisible) {
+                }/*ShowLogoutConfirmationDialog(isDialogVisible) {
                     navController.navigate(route = AuthScreen.Login.route) {
                         popUpTo(route = MovieScreen.MovieList.route) {
                             inclusive = true
@@ -229,8 +230,7 @@ fun BottomNavigationBar(
 ) {
 
     val screens = listOf(
-        MainScreen.HomeScreen.route,
-        ProfileScreen.Profile.route
+        MainScreen.HomeScreen.route, ProfileScreen.Profile.route
     )
 
     val backStackEntry = navController.currentBackStackEntryAsState()
@@ -251,66 +251,52 @@ fun BottomNavigationBar(
         ) {
             items.forEach { item ->
                 val selected = item.route == backStackEntry.value?.destination?.route
-                BottomNavigationItem(
-                    selected = selected,
+                BottomNavigationItem(selected = selected,
                     onClick = { if (!selected) onItemClick(item) },
                     selectedContentColor = MaterialTheme.colors.primary,
                     unselectedContentColor = Color.Gray,
                     icon = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             if (item.badgeCount > 0) {
-                                BadgedBox(
-                                    badge = {
-                                        Badge {
-                                            Text(
-                                                text = item.badgeCount.toString(),
-                                                color = Color.White
-                                            )
-                                        }
+                                BadgedBox(badge = {
+                                    Badge {
+                                        Text(
+                                            text = item.badgeCount.toString(), color = Color.White
+                                        )
                                     }
-                                ) {
+                                }) {
                                     Icon(
-                                        imageVector = item.icon,
-                                        contentDescription = item.name
+                                        imageVector = item.icon, contentDescription = item.name
                                     )
                                 }
                             } else {
                                 Icon(
-                                    imageVector = item.icon,
-                                    contentDescription = item.name
+                                    imageVector = item.icon, contentDescription = item.name
                                 )
                             }
                             if (selected) {
                                 Text(
-                                    text = item.name,
-                                    textAlign = TextAlign.Center,
-                                    fontSize = 10.sp
+                                    text = item.name, textAlign = TextAlign.Center, fontSize = 10.sp
                                 )
                             }
                         }
-                    }
-                )
+                    })
             }
         }
     }
 }
 
 class NavShape(
-    private val widthOffset: Dp,
-    private val scale: Float
+    private val widthOffset: Dp, private val scale: Float
 ) : Shape {
 
     override fun createOutline(
-        size: androidx.compose.ui.geometry.Size,
-        layoutDirection: LayoutDirection,
-        density: Density
+        size: androidx.compose.ui.geometry.Size, layoutDirection: LayoutDirection, density: Density
     ): Outline {
         return Outline.Rectangle(
             Rect(
-                Offset.Zero,
-                Offset(
-                    size.width * scale + with(density) { widthOffset.toPx() },
-                    size.height
+                Offset.Zero, Offset(
+                    size.width * scale + with(density) { widthOffset.toPx() }, size.height
                 )
             )
         )
