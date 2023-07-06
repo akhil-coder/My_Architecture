@@ -5,13 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.core.domain.DataState
 import com.example.core.domain.UIComponent
 import com.example.core.util.Logger
 import com.example.core.util.exhaustive
+import com.example.domain.model.tvList.TvShow
 import com.example.interactors.tvShow.TvShowInteractor
 import com.example.navigation.network.ConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -28,8 +32,7 @@ class TvShowListViewModel @Inject constructor(
     private val _tvShowListState = mutableStateOf(TvShowListState())
     val tvShowListStateState: State<TvShowListState> = _tvShowListState
 
-    val discoverTvShowStream =
-        tvShowInteractor.discoverTvShow.getDiscoverMovieStream().cachedIn(viewModelScope)
+    var discoverTvShowStream: Flow<PagingData<TvShow>>? = null
 
     init {
         connectivityObserver.observe().onEach {
@@ -42,6 +45,8 @@ class TvShowListViewModel @Inject constructor(
     fun onEventChange(events: TvShowListEvents) {
         when (events) {
             TvShowListEvents.DiscoverTvShows -> {
+                discoverTvShowStream = tvShowInteractor.discoverTvShow.getDiscoverMovieStream().cachedIn(viewModelScope)
+
             }
 
             TvShowListEvents.OnRemoveHeadFromQueue -> {
