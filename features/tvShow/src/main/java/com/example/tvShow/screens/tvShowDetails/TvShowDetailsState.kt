@@ -1,15 +1,15 @@
-package com.example.tvShow.screens.tvShow
+package com.example.tvShow.screens.tvShowDetails
 
 import androidx.compose.runtime.mutableStateListOf
 import com.example.core.domain.ProgressBarState
 import com.example.core.domain.Queue
 import com.example.core.domain.UIComponent
-import com.example.domain.model.movieList.Movie
-import com.example.domain.model.tvList.TvShow
+import com.example.domain.model.movieDetails.MovieDetails
+import com.example.domain.model.tvShowDetails.TvShowDetails
 
-data class TvShowListState(
+data class TvShowDetailsState(
     val progressBarState: ProgressBarState = ProgressBarState.Idle,
-    val tvShows: List<TvShow> = listOf(),
-    var selectedTvShow: TvShow? = null,
+    val tvShowDetails: TvShowDetails? = null,
+    val isFavorite: Boolean = false,
     val errorQueue: Queue<UIComponent> = Queue(mutableStateListOf())
 )

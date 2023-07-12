@@ -176,7 +176,6 @@ fun movieList(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 12.dp)
                     )
-
                 }
 
             }

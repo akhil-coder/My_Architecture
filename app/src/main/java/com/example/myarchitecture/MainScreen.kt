@@ -58,7 +58,7 @@ fun MainScreen(
     val items = listOf(
         BottomNavItem(
             name = stringResource(R.string.home),
-            route = TvShowScreen.TvShow.route,
+            route = TvShowScreen.TvShowList.route,
             icon = Icons.Default.Home,
         ),
         BottomNavItem(
@@ -72,7 +72,7 @@ fun MainScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            if (currentDestination?.route == TvShowScreen.TvShow.route) {
+            if (currentDestination?.route == TvShowScreen.TvShowList.route) {
                 AppBarDrawer(
                     title = stringResource(R.string.movie_app)
                 ) {
@@ -88,7 +88,7 @@ fun MainScreen(
                 navController = navController,
                 onItemClick = {
                     navController.navigate(it.route) {
-                        popUpTo(route = TvShowScreen.TvShow.route)
+                        popUpTo(route = TvShowScreen.TvShowList.route)
                         launchSingleTop = true
                     }
                 }
@@ -175,7 +175,7 @@ fun MainScreen(
                     }) {
 
                     navController.navigate(route = AuthScreen.Login.route) {
-                        popUpTo(route = TvShowScreen.TvShow.route) {
+                        popUpTo(route = TvShowScreen.TvShowList.route) {
                             inclusive = true
                         }
                     }
@@ -202,7 +202,7 @@ fun BottomNavigationBar(
 ) {
 
     val screens = listOf(
-        TvShowScreen.TvShow.route,
+        TvShowScreen.TvShowList.route,
         ProfileScreen.Profile.route
     )
 

@@ -40,7 +40,7 @@ internal object InternalAuthNavigation : FeatureNavigation {
                         }
                     }
                 }, navigateToMovieListsScreen = {
-                    navController.navigate(route = TvShowScreen.TvShow.route) {
+                    navController.navigate(route = TvShowScreen.TvShowList.route) {
                         popUpTo(route = AuthScreen.Login.route) {
                             inclusive = true
                         }

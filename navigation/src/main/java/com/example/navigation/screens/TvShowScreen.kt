@@ -1,9 +1,18 @@
 package com.example.navigation.screens
 
+import androidx.navigation.NamedNavArgument
+
 sealed class TvShowScreen(
-    val route: String
+    val route: String,
+    val arguments: List<NamedNavArgument>
 ) {
-    object TvShow : TvShowScreen(
-        route = "tvShow"
+    object TvShowList : TvShowScreen(
+        route = "tvShowList",
+        arguments = emptyList()
     )
+
+    object TvShowDetails : TvShowScreen(
+        route = "tvShowDetails",
+        arguments = emptyList()
+        )
 }

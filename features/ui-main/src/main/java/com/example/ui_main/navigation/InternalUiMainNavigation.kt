@@ -64,7 +64,7 @@ internal object InternalUiMainNavigation : FeatureNavigation {
             ) {
                 val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
                 HomeScreen(navigateToTvShows = {
-                    navController.navigate(route = TvShowScreen.TvShow.route) {
+                    navController.navigate(route = TvShowScreen.TvShowList.route) {
                         popUpTo(route = MainScreen.HomeScreen.route) {
                             inclusive = false
                         }
