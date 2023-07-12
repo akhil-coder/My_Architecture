@@ -11,7 +11,7 @@ data class FavoriteMovie(
     val originalLanguage: String,
     val originalTitle: String,
     val overview: String,
-    val posterPath: String,
+    val posterPath: String?,
     val voteCount: Int,
     /*val genres: List<String>,*/
 )

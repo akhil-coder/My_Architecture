@@ -104,7 +104,7 @@ fun MainScreen(
             when (currentDestination?.route) {
                 MainScreen.HomeScreen.route -> {
                     AppBarDrawer(
-                        title = stringResource(R.string.home_screen), onNavigationItemClick = {
+                        title = stringResource(R.string.utils), onNavigationItemClick = {
                             scope.launch {
                                 scaffoldState.drawerState.open()
                             }
@@ -112,7 +112,7 @@ fun MainScreen(
                     )
                 }
 
-                TvShowScreen.TvShow.route -> {
+                TvShowScreen.TvShowList.route -> {
 
                 }
             }
@@ -120,7 +120,7 @@ fun MainScreen(
         bottomBar = {
             BottomNavigationBar(items = items, navController = navController, onItemClick = {
                 navController.navigate(it.route) {
-                    popUpTo(route = TvShowScreen.TvShow.route)
+                    popUpTo(route = TvShowScreen.TvShowList.route)
                     launchSingleTop = true
                 }
             })
@@ -204,7 +204,7 @@ fun MainScreen(
                     }) {
 
                     navController.navigate(route = AuthScreen.Login.route) {
-                        popUpTo(route = TvShowScreen.TvShow.route) {
+                        popUpTo(route = TvShowScreen.TvShowList.route) {
                             inclusive = true
                         }
                     }

@@ -4,7 +4,6 @@ apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.dagger.hilt.android'
 
-
 android {
     buildToolsVersion Android.buildTools
     compileSdk 33
@@ -76,5 +75,4 @@ dependencies {
     //navigation
     implementation Compose.navigation
     implementation Compose.hiltNavigation
-
 }

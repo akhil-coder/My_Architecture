@@ -14,7 +14,6 @@ fun MovieDetails.toDbMovieDetails(): FavoriteMovie {
         voteCount = this.voteCount,
         /*genres = this.genres.map { it.name }*/
     )
-
 }
 
 fun FavoriteMovie.toDomainMovieDetails(): MovieDetails {
@@ -27,5 +26,4 @@ fun FavoriteMovie.toDomainMovieDetails(): MovieDetails {
         voteCount = this.voteCount,
         genres = emptyList()
     )
-
 }

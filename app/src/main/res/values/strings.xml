@@ -8,5 +8,4 @@
     <string name="logout_confirmation">Logout Confirmation</string>
     <string name="logout_confirmation_message">Are you sure you want to Logout?</string>
     <string name="utils">Utils</string>
-    <string name="home_screen" translatable="false">Home Screen</string>
 </resources>

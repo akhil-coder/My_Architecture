@@ -37,7 +37,6 @@ fun MovieDetailsScreen(
     backWithResult: (Map<String, Any>?) -> Unit
 ) {
 
-
     DefaultScreenUI(
         networkStatus = networkStatus.value,
         appBar = { CustomAppBar(state, event, backWithResult) },

@@ -20,15 +20,13 @@ fun MovieListResponse.toDomainMovieList(): List<Movie> {
 fun MovieDetailsResponse.toDomainMovieDetails(): MovieDetails {
     return MovieDetails(
         id = this.id,
-        posterPath = appendImageBaseUrl(this.posterPath),
+        posterPath = this.posterPath?.let { appendImageBaseUrl(it) },
         originalLanguage = this.originalLanguage,
         originalTitle = this.title,
         overview = this.overview,
         voteCount = this.voteCount,
         genres = this.genres.map { it.name }
     )
-
-
 }
 
-fun appendImageBaseUrl(url: String) = "https://image.tmdb.org/t/p/w500$url"
+fun appendImageBaseUrl(url: String?): String? = url.let { "https://image.tmdb.org/t/p/w500$it" } ?: run { "" }

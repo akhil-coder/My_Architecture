@@ -1,38 +1,25 @@
 package com.example.tvShow.screens.tvShow
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.Sort
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -40,14 +27,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
@@ -55,10 +38,7 @@ import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.components.DefaultScreenUI
-import com.example.components.drawer.AppBarDrawer
 import com.example.domain.model.tvList.TvShow
-import com.example.tvShow.R
-import kotlinx.coroutines.launch
 
 @Composable
 fun TvShowListScreen(
@@ -66,91 +46,26 @@ fun TvShowListScreen(
     networkStatus: MutableState<Boolean>,
     state: TvShowListState,
     event: (TvShowListEvents) -> Unit,
-    navigateToDetailsScreen: ((String) -> Unit)? = null,
+    navigateToDetailsScreen: () -> Unit,
     savedStateHandle: SavedStateHandle?,
-    navController: NavHostController,
+    viewModel: TvShowListViewModel,
 ) {
-
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
-
-
     DefaultScreenUI(
-        appBar = {
-            AppBarDrawer(
-                title = stringResource(R.string.tvshows),
-                onNavigationItemClick = {
-                    scope.launch {
-                        scaffoldState.drawerState.open()
-                    }
-                },
-                onSearchItemClick = {
-                    scope.launch {
-                        scaffoldState.drawerState.open()
-                    }
-                },
-            )
-        },
-        bottomBar = {
-            Card(
-                modifier = Modifier.background(color = Color.White),
-                elevation = 8.dp,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    TextButton(modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(), onClick = { }) {
-                        Icon(
-                            imageVector = Icons.Filled.Sort,
-                            contentDescription = "Sort Icon",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Sort")
-
-                    }
-                    Divider(
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .fillMaxHeight()  //fill the max height
-                            .width(1.dp)
-                    )
-                    TextButton(modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(), onClick = { }) {
-                        Icon(
-                            imageVector = Icons.Filled.FilterList,
-                            contentDescription = "Filter Icon",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Filter")
-                    }
-                }
-            }
-        },
-        networkStatus = networkStatus.value,
-        queue = state.errorQueue,
-        onRemoveHeadFromQueue = {
+        networkStatus = networkStatus.value, queue = state.errorQueue, onRemoveHeadFromQueue = {
             event(TvShowListEvents.OnRemoveHeadFromQueue)
-        },
-        progressBarState = state.progressBarState
+        }, progressBarState = state.progressBarState
     ) {
         TvShowList(
+            viewModel = viewModel,
             state = state,
             imageLoader = imageLoader,
             navigateToDetailsScreen = navigateToDetailsScreen,
-            event = event
+            event = event,
+            savedStateHandle = savedStateHandle
         )
     }
+    viewModel.printData()
+
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -158,12 +73,14 @@ fun TvShowListScreen(
 fun TvShowList(
     state: TvShowListState,
     imageLoader: ImageLoader,
-    navigateToDetailsScreen: ((String) -> Unit)? = null,
+    navigateToDetailsScreen: (() -> Unit),
     event: (TvShowListEvents) -> Unit,
-    viewModel: TvShowListViewModel = hiltViewModel()
+    viewModel: TvShowListViewModel,
+    savedStateHandle: SavedStateHandle?
 ) {
+    val context = LocalContext.current
 
-    val discoverTvShow = viewModel.discoverTvShowStream.collectAsLazyPagingItems()
+    val discoverTvShow = viewModel.discoverTvShowStream?.collectAsLazyPagingItems()
 
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(150.dp),
@@ -173,28 +90,97 @@ fun TvShowList(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalItemSpacing = 12.dp
     ) {
-        items(
-            count = discoverTvShow.itemCount,
-            key = discoverTvShow.itemKey(),
-            contentType = discoverTvShow.itemContentType()
-        ) { index ->
-            val item = discoverTvShow[index]
-            tvShowListItem(item!!)
+        if (discoverTvShow != null) {
+            items(
+                count = discoverTvShow.itemCount,
+                key = discoverTvShow.itemKey(),
+                contentType = discoverTvShow.itemContentType()
+            ) { index ->
+                val item = discoverTvShow[index]
+                tvShowListItem(item!!, navigateToDetailsScreen, savedStateHandle, viewModel)
+            }
+        }
+
+        discoverTvShow?.apply {
+            when {
+                loadState.refresh is LoadState.Loading -> {
+
+                    when (val currentState = loadState.refresh) {
+                        is LoadState.Loading -> {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(16.dp)
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier
+                                            .padding(12.dp)
+                                            .align(
+                                                Alignment.Center
+                                            )
+                                    )
+                                }
+                            }
+                        }
+
+                        is LoadState.Error -> {
+                            val extractedException = currentState.error
+                            Toast.makeText(
+                                context, "${extractedException.message}", Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        is LoadState.NotLoading -> {}
+                    }
+                }
+
+                loadState.append is LoadState.Loading -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .padding(12.dp)
+                                    .align(
+                                        Alignment.Center
+                                    )
+                            )
+                        }
+                    }
+                }
+
+                loadState.prepend is LoadState.Loading -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .padding(12.dp)
+                                    .align(
+                                        Alignment.Center
+                                    )
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
-@Preview(device = "id:pixel_6_pro")
 @Composable
 fun tvShowListItem(
-    item: TvShow = TvShow(
-        id = 123,
-        name = "English",
-        originalLanguage = "ieoj",
-        overview = "The best",
-        posterPath = "the/def/efd",
-        voteAverage = 2023.00
-    )
+    item: TvShow,
+    navigateToDetailsScreen: () -> Unit,
+    savedStateHandle: SavedStateHandle?,
+    viewModel: TvShowListViewModel
 ) {
     // TODO: Random Generated Gradient Colors
     val gradientColorList = listOf(
@@ -204,13 +190,19 @@ fun tvShowListItem(
         listOf(Color(0xFF3547AC), Color(0xFF3F51B5), Color(0xFF0C9C8F)),
         listOf(Color(0xFF3547AC), Color(0xFF00BCD4), Color(0xFF27E4FC))
     )
-
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .padding(2.dp)
-            .clickable {},
-        elevation = 8.dp,
-        shape = RoundedCornerShape(topEnd = 14.dp, bottomStart = 14.dp)
+            .clickable {
+                if (navigateToDetailsScreen != null) {
+                    viewModel.setSelectedTvShow(item = item)
+                    navigateToDetailsScreen()
+                }
+                Toast
+                    .makeText(context, "Clicked", Toast.LENGTH_SHORT)
+                    .show()
+            }, elevation = 8.dp, shape = RoundedCornerShape(topEnd = 14.dp, bottomStart = 14.dp)
     ) {
         Column(
             modifier = Modifier.background(

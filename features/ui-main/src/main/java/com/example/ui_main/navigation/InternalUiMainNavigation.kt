@@ -68,12 +68,12 @@ internal object InternalUiMainNavigation : FeatureNavigation {
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,
                     navigateToTvShows = {
-                    navController.navigate(route = TvShowScreen.TvShow.route) {
-                        popUpTo(route = MainScreen.HomeScreen.route) {
-                            inclusive = false
+                        navController.navigate(route = TvShowScreen.TvShowList.route) {
+                            popUpTo(route = MainScreen.HomeScreen.route) {
+                                inclusive = false
+                            }
                         }
-                    }
-                })
+                    })
             }
 
             composable(
