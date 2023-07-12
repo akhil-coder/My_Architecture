@@ -1,5 +1,6 @@
 package com.example.tvShow.screens.tvShow
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -7,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.core.domain.DataState
+import com.example.core.domain.ProgressBarState
 import com.example.core.domain.UIComponent
 import com.example.core.util.Logger
 import com.example.core.util.exhaustive
@@ -30,9 +31,9 @@ class TvShowListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _tvShowListState = mutableStateOf(TvShowListState())
-    val tvShowListStateState: State<TvShowListState> = _tvShowListState
+    val tvShowListState: State<TvShowListState> = _tvShowListState
 
-    var discoverTvShowStream: Flow<PagingData<TvShow>>? = null
+    var discoverTvShowStream: Flow<PagingData<TvShow>>? = null // TODO: Check other repo
 
     init {
         connectivityObserver.observe().onEach {
@@ -42,67 +43,44 @@ class TvShowListViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun printData(){
+        Log.d("TvShowListViewModel", "printData: ${_tvShowListState.value.selectedTvShow}")
+    }
     fun onEventChange(events: TvShowListEvents) {
         when (events) {
             TvShowListEvents.DiscoverTvShows -> {
-                discoverTvShowStream = tvShowInteractor.discoverTvShow.getDiscoverMovieStream().cachedIn(viewModelScope)
-
+                discoverTvShowStream = tvShowInteractor.discoverTvShow.getDiscoverMovieStream()
+                    .cachedIn(viewModelScope)
             }
 
             TvShowListEvents.OnRemoveHeadFromQueue -> {
                 try {
-                    val queue = tvShowListStateState.value.errorQueue
+                    val queue = tvShowListState.value.errorQueue
                     queue.remove()
-                    _tvShowListState.value = tvShowListStateState.value.copy(
+                    _tvShowListState.value = tvShowListState.value.copy(
                         errorQueue = queue
                     )
                 } catch (e: Exception) {
                     logger.log("Nothing to remove from queue")
                 }
             }
+
+            is TvShowListEvents.OnListItemClick -> {
+                _tvShowListState.value = tvShowListState.value.copy(
+                    selectedTvShow = events.tvShow
+                )
+            }
         }.exhaustive
     }
 
-    /*  private fun discoverTvShow() {
-          tvShowInteractor.discoverTvShow().onEach { dataState ->
-              when (dataState) {
-                  is DataState.Data -> {
-                      _tvShowListState.value = tvShowListStateState.value.copy(
-                          tvShows = dataState.data?.shuffled() ?: listOf()
-                      )
-                      logger.log("Movie list size: ${tvShowListStateState.value.tvShows.size}")
-                  }
-
-                  is DataState.Loading -> {
-                      _tvShowListState.value = tvShowListStateState.value.copy(
-                          progressBarState = dataState.progressBarState
-                      )
-                  }
-
-                  is DataState.Response -> {
-                      when (dataState.uiComponent) {
-                          is UIComponent.Dialog -> {
-                              addToMessageQueue(dataState.uiComponent)
-                              logger.log((dataState.uiComponent as UIComponent.Dialog).description)
-                          }
-
-                          is UIComponent.None -> {
-                              logger.log((dataState.uiComponent as UIComponent.None).message)
-                          }
-
-                          is UIComponent.SnackBar -> {
-
-                          }
-                      }.exhaustive
-                  }
-              }.exhaustive
-          }.launchIn(viewModelScope)
-      }*/
+    fun setSelectedTvShow(item: TvShow) {
+        onEventChange(TvShowListEvents.OnListItemClick(item))
+    }
 
     private fun addToMessageQueue(uiComponent: UIComponent) {
-        val queue = tvShowListStateState.value.errorQueue
+        val queue = tvShowListState.value.errorQueue
         queue.add(uiComponent)
-        _tvShowListState.value = tvShowListStateState.value.copy(
+        _tvShowListState.value = tvShowListState.value.copy(
             errorQueue = queue
         )
     }
@@ -110,5 +88,6 @@ class TvShowListViewModel @Inject constructor(
 
 sealed class TvShowListEvents {
     object DiscoverTvShows : TvShowListEvents()
+    data class OnListItemClick(val tvShow: TvShow) : TvShowListEvents()
     object OnRemoveHeadFromQueue : TvShowListEvents()
 }

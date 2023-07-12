@@ -23,4 +23,7 @@ dependencies {
     "implementation"(Paging.paging)
     "implementation"(Paging.pagingCompose)
 
+    //Constraints
+    "implementation"(Compose.constraints)
+
 }

@@ -4,15 +4,14 @@ import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import coil.ImageLoader
-import com.example.domain.model.tvList.TvShow
 import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
-import com.example.navigation.screens.MovieScreen
 import com.example.navigation.screens.TvShowScreen
 import com.example.tvShow.screens.tvShow.TvShowListScreen
 import com.example.tvShow.screens.tvShow.TvShowListViewModel
@@ -40,7 +39,6 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                     )
                 ) + fadeOut(animationSpec = tween(durationMillis = 300))
             },
-
                 popEnterTransition = {
                     slideInHorizontally(
                         initialOffsetX = { -width }, animationSpec = tween(
@@ -48,27 +46,27 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                         )
                     ) + fadeIn(animationSpec = tween(durationMillis = 300))
                 }) {
+
                 val tvShowListViewModel = hiltViewModel<TvShowListViewModel>()
                 Log.e("Network::", "composable : $networkStatus ")
                 TvShowListScreen(
+                    viewModel = tvShowListViewModel,
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,
-                    state = tvShowListViewModel.tvShowListStateState.value,
+                    state = tvShowListViewModel.tvShowListState.value,
                     event = tvShowListViewModel::onEventChange,
-                    navigateToDetailsScreen = { selectedItem ->
-                        navController.navigate(route = "${TvShowScreen.TvShowDetails.route}/$selectedItem")
+                    navigateToDetailsScreen = {
+                        navController.navigate(route = "${TvShowScreen.TvShowDetails.route}")
                     },
                     savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
                 )
             }
 
-            composable(
-                route = TvShowScreen.TvShowDetails.route + "/{tvShowId}",
+            composable(route = TvShowScreen.TvShowDetails.route,
                 arguments = TvShowScreen.TvShowDetails.arguments,
                 enterTransition = {
                     slideInHorizontally(
-                        initialOffsetX = { width },
-                        animationSpec = tween(
+                        initialOffsetX = { width }, animationSpec = tween(
                             durationMillis = 300,
                         )
                     ) + fadeIn(animationSpec = tween(durationMillis = 300))
@@ -76,21 +74,24 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
 
                 popExitTransition = {
                     slideOutHorizontally(
-                        targetOffsetX = { width },
-                        animationSpec = tween(
+                        targetOffsetX = { width }, animationSpec = tween(
                             durationMillis = 300,
                         )
                     ) + fadeOut(animationSpec = tween(durationMillis = 300))
+                }) { navBackStack ->
+
+                val parentEntry = remember(navBackStack) {
+                    navController.getBackStackEntry(TvShowScreen.TvShowList.route)
                 }
-            ) { navBackStack ->
+                val tvShowListViewModel = hiltViewModel<TvShowListViewModel>(parentEntry)
+
                 //val id = navBackStack.arguments?.getString("movieId") ?: ""
+
                 val tvShowDetailsViewModel = hiltViewModel<TvShowDetailsViewModel>()
                 TvShowDetailsScreen(
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,
-                    state = tvShowDetailsViewModel.detailsState.value,
-                    event = tvShowDetailsViewModel::onEventChange,
-                    savedStateHandle = null
+                    state = tvShowListViewModel.tvShowListState.value,
                 )
             }
         }

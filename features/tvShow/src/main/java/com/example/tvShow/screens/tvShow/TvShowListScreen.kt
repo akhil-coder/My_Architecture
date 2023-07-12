@@ -1,6 +1,5 @@
 package com.example.tvShow.screens.tvShow
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -30,9 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -49,8 +46,9 @@ fun TvShowListScreen(
     networkStatus: MutableState<Boolean>,
     state: TvShowListState,
     event: (TvShowListEvents) -> Unit,
-    navigateToDetailsScreen: ((TvShow) -> Unit)?,
+    navigateToDetailsScreen: () -> Unit,
     savedStateHandle: SavedStateHandle?,
+    viewModel: TvShowListViewModel,
 ) {
     DefaultScreenUI(
         networkStatus = networkStatus.value, queue = state.errorQueue, onRemoveHeadFromQueue = {
@@ -58,6 +56,7 @@ fun TvShowListScreen(
         }, progressBarState = state.progressBarState
     ) {
         TvShowList(
+            viewModel = viewModel,
             state = state,
             imageLoader = imageLoader,
             navigateToDetailsScreen = navigateToDetailsScreen,
@@ -65,6 +64,8 @@ fun TvShowListScreen(
             savedStateHandle = savedStateHandle
         )
     }
+    viewModel.printData()
+
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -72,9 +73,9 @@ fun TvShowListScreen(
 fun TvShowList(
     state: TvShowListState,
     imageLoader: ImageLoader,
-    navigateToDetailsScreen: ((TvShow) -> Unit)? = null,
+    navigateToDetailsScreen: (() -> Unit),
     event: (TvShowListEvents) -> Unit,
-    viewModel: TvShowListViewModel = hiltViewModel(),
+    viewModel: TvShowListViewModel,
     savedStateHandle: SavedStateHandle?
 ) {
     val context = LocalContext.current
@@ -96,7 +97,7 @@ fun TvShowList(
                 contentType = discoverTvShow.itemContentType()
             ) { index ->
                 val item = discoverTvShow[index]
-                tvShowListItem(item!!, navigateToDetailsScreen, savedStateHandle)
+                tvShowListItem(item!!, navigateToDetailsScreen, savedStateHandle, viewModel)
             }
         }
 
@@ -132,7 +133,6 @@ fun TvShowList(
 
                         is LoadState.NotLoading -> {}
                     }
-
                 }
 
                 loadState.append is LoadState.Loading -> {
@@ -177,14 +177,10 @@ fun TvShowList(
 
 @Composable
 fun tvShowListItem(
-    item: TvShow = TvShow(
-        id = 123,
-        name = "English",
-        originalLanguage = "ieoj",
-        overview = "The best",
-        posterPath = "the/def/efd",
-        voteAverage = 2023.00
-    ), navigateToDetailsScreen: ((TvShow) -> Unit)?, savedStateHandle: SavedStateHandle?
+    item: TvShow,
+    navigateToDetailsScreen: () -> Unit,
+    savedStateHandle: SavedStateHandle?,
+    viewModel: TvShowListViewModel
 ) {
     // TODO: Random Generated Gradient Colors
     val gradientColorList = listOf(
@@ -200,20 +196,8 @@ fun tvShowListItem(
             .padding(2.dp)
             .clickable {
                 if (navigateToDetailsScreen != null) {
-                    try {
-                        savedStateHandle?.set(
-                            "clickedTvShow", TvShow(
-                                id = 123,
-                                name = "English",
-                                originalLanguage = "ieoj",
-                                overview = "The best",
-                                posterPath = "the/def/efd",
-                                voteAverage = 2023.00
-                            )
-                        )
-                    } catch (e: Exception) {
-                        Log.e("TvShow", "tvShowListItem: $e")
-                    }
+                    viewModel.setSelectedTvShow(item = item)
+                    navigateToDetailsScreen()
                 }
                 Toast
                     .makeText(context, "Clicked", Toast.LENGTH_SHORT)

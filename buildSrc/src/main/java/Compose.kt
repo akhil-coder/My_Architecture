@@ -8,7 +8,7 @@ object Compose {
     const val tooling = "androidx.compose.ui:ui-tooling-preview:$composeVersion"
     const val liveDataRuntime = "androidx.compose.runtime:runtime-livedata:$composeVersion"
 
-    private const val navigationVersion = "2.5.3"
+    private const val navigationVersion = "2.6.0"
     const val navigation = "androidx.navigation:navigation-compose:$navigationVersion"
 
     private const val hiltNavigationComposeVersion = "1.0.0"
@@ -16,4 +16,6 @@ object Compose {
 
     private const val iconsVersion = "1.4.0"
     const val icons = "androidx.compose.material:material-icons-extended:$iconsVersion"
+
+    const val constraints = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 }
