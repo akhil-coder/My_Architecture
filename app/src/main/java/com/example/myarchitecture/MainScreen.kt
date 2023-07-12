@@ -104,7 +104,7 @@ fun MainScreen(
             when (currentDestination?.route) {
                 MainScreen.HomeScreen.route -> {
                     AppBarDrawer(
-                        title = stringResource(R.string.utils), onNavigationItemClick = {
+                        title = stringResource(R.string.home), onNavigationItemClick = {
                             scope.launch {
                                 scaffoldState.drawerState.open()
                             }

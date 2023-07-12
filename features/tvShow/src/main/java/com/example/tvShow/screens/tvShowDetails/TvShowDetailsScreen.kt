@@ -169,7 +169,7 @@ fun OverlappingBoxes(
         val smallPlaceable = smallBox.measure(looseConstraints)
         layout(
             width = constraints.maxWidth,
-            height = (largePlaceable.height * 0.90 + smallPlaceable.height).toInt(),
+            height = (largePlaceable.height * 0.95 + smallPlaceable.height).toInt(),
         ) {
             largePlaceable.placeRelative(
                 x = 0,
@@ -177,7 +177,7 @@ fun OverlappingBoxes(
             )
 
             smallPlaceable.placeRelative(
-                x = 0, y = (largePlaceable.height * 0.90).toInt()
+                x = 0, y = (largePlaceable.height * 0.95).toInt()
             )
         }
     }
