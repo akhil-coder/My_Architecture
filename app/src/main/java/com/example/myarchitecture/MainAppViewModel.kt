@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.interactors.tvShow.TvShowInteractor
 import com.example.navigation.network.ConnectivityObserver
 import com.example.preferences.BasePreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,9 +14,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainAppViewModel @Inject constructor(
- private val basePreferencesManager: BasePreferencesManager,
- private val connectivityObserver: ConnectivityObserver
-) : ViewModel() {
+    private val basePreferencesManager: BasePreferencesManager,
+    private val connectivityObserver: ConnectivityObserver,
+    ) : ViewModel() {
 
     private val _themeState = mutableStateOf(false)
     val themeState: State<Boolean> = _themeState

@@ -2,8 +2,11 @@ package com.example.interactors.di
 
 import com.example.datasource.network.WebService
 import com.example.domain.service.cache.FavoriteDbService
+import com.example.domain.service.network.HomeUiNetworkService
 import com.example.domain.service.network.MovieNetworkService
-import com.example.interactors.favotite.*
+import com.example.interactors.favorite.*
+import com.example.interactors.homeUi.GetHomeUi
+import com.example.interactors.homeUi.HomeUiInteractor
 import com.example.interactors.movies.GetAllMovies
 import com.example.interactors.movies.GetMovieDetails
 import com.example.interactors.movies.MovieInteractor
@@ -18,6 +21,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object InteractorsModule {
+
+    @Provides
+    @Singleton
+    fun provideHomeUiInteractor(service: HomeUiNetworkService) = HomeUiInteractor(
+        getHomeUi = GetHomeUi(networkService = service)
+    )
 
     @Provides
     @Singleton

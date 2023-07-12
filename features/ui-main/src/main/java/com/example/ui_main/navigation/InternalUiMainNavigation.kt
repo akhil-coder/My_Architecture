@@ -23,7 +23,6 @@ import com.example.ui_main.screens.util.UtilViewModel
 import com.google.accompanist.navigation.animation.composable
 
 internal object InternalUiMainNavigation : FeatureNavigation {
-
     @OptIn(ExperimentalAnimationApi::class)
     override fun registerGraph(
         navController: NavHostController,
@@ -63,13 +62,18 @@ internal object InternalUiMainNavigation : FeatureNavigation {
                 route = MainScreen.HomeScreen.route
             ) {
                 val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
-                HomeScreen(navigateToTvShows = {
-                    navController.navigate(route = TvShowScreen.TvShowList.route) {
-                        popUpTo(route = MainScreen.HomeScreen.route) {
-                            inclusive = false
+                HomeScreen(
+                    state = homeScreenViewModel.homeUiState.value,
+                    event = homeScreenViewModel::onEventChange,
+                    imageLoader = imageLoader,
+                    networkStatus = networkStatus,
+                    navigateToTvShows = {
+                        navController.navigate(route = TvShowScreen.TvShowList.route) {
+                            popUpTo(route = MainScreen.HomeScreen.route) {
+                                inclusive = false
+                            }
                         }
-                    }
-                })
+                    })
             }
 
             composable(

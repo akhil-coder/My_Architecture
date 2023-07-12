@@ -1,5 +1,3 @@
-package com.example.datasource.network.tvList
-
 
 import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep

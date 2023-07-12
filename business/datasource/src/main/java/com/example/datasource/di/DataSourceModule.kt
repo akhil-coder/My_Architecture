@@ -3,8 +3,8 @@ package com.example.datasource.di
 import android.content.Context
 import androidx.room.Room
 import com.example.datasource.cache.data.MovieDataBase
+import com.example.datasource.network.ServerUiService
 import com.example.datasource.network.WebService
-import com.example.datasource.network.networkService.MovieNetworkServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -30,6 +29,17 @@ object DataSourceModule {
         return Retrofit.Builder().baseUrl("https://api.themoviedb.org/3/").client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create()).build()
             .create(WebService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideServerUIService(): ServerUiService {
+        val logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val okHttpClient: OkHttpClient = OkHttpClient.Builder().addInterceptor(logging).build()
+
+        return Retrofit.Builder().baseUrl("https://8a19d9be-0e1c-4776-910f-fdc130506be6.mock.pstmn.io/").client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create()).build()
+            .create(ServerUiService::class.java)
     }
 
 

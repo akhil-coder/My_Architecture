@@ -68,6 +68,8 @@ dependencies {
     implementation(project(Modules.feature_auth))
     implementation(project(Modules.feature_profile))
     implementation(project(Modules.feature_myList))
+    implementation(project(Modules.feature_tvShow))
+
 
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.appCompat)

@@ -13,7 +13,6 @@ import com.example.navigation.GraphRoute
 import com.example.navigation.screens.AuthScreen
 import com.example.navigation.screens.MainScreen
 import com.example.navigation.screens.MovieScreen
-import com.example.navigation.screens.TvShowScreen
 import com.google.accompanist.navigation.animation.composable
 
 internal object InternalAuthNavigation : FeatureNavigation {
@@ -40,8 +39,8 @@ internal object InternalAuthNavigation : FeatureNavigation {
                         }
                     }
                 }, navigateToMovieListsScreen = {
-                    navController.navigate(route = TvShowScreen.TvShowList.route) {
-                        popUpTo(route = AuthScreen.Login.route) {
+                    navController.navigate(route = MainScreen.HomeScreen.route) {
+                        popUpTo(route = MainScreen.HomeScreen.route) {
                             inclusive = true
                         }
                     }

@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.datasource.network.WebService
-import com.example.datasource.network.tvList.TvShowPagingSource
+import com.example.datasource.network.networkService.pagingSource.TvShowPagingSource
 import com.example.domain.model.tvList.TvShow
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

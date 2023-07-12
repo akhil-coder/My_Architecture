@@ -1,4 +1,4 @@
-package com.example.interactors.favotite
+package com.example.interactors.favorite
 
 data class FavoriteInteractor(
     val getFavorites: GetFavorites,

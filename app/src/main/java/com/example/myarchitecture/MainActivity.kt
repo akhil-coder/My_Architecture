@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var connectivityManager: ConnectivityManager
 
-
     private val viewModel: MainAppViewModel by viewModels()
 
     override fun onStart() {

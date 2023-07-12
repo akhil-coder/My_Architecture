@@ -1,4 +1,4 @@
-package com.example.interactors.favotite
+package com.example.interactors.favorite
 
 import com.example.core.domain.DataState
 import com.example.core.domain.ProgressBarState

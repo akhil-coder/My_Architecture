@@ -1,4 +1,4 @@
-package com.example.interactors.favotite
+package com.example.interactors.favorite
 import com.example.domain.model.movieDetails.MovieDetails
 import com.example.domain.service.cache.FavoriteDbService
 

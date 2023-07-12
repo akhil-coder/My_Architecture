@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home_Page" translatable="false">Movie Details</string>
+    <string name="tvshows" translatable="false">TvShows</string>
     <string name="description">Description</string>
 </resources>

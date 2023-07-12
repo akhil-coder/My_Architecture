@@ -1,7 +1,10 @@
 package com.example.datasource.di
 
+import com.example.datasource.network.ServerUiService
 import com.example.datasource.network.WebService
+import com.example.datasource.network.networkService.HomeUiNetworkServiceImpl
 import com.example.datasource.network.networkService.MovieNetworkServiceImpl
+import com.example.domain.service.network.HomeUiNetworkService
 import com.example.domain.service.network.MovieNetworkService
 import dagger.Module
 import dagger.Provides
@@ -18,6 +21,10 @@ object NetworkServiceModule {
     fun provideMovieNetworkService(webService: WebService): MovieNetworkService =
         MovieNetworkServiceImpl(webService)
 
+    @Singleton
+    @Provides
+    fun provideHomeUiNetworkService(serverUiService: ServerUiService): HomeUiNetworkService =
+        HomeUiNetworkServiceImpl(serverUiService)
 
 //    @Singleton
 //    @Provides

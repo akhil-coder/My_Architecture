@@ -6,7 +6,6 @@ sealed class MainScreen(
     val route: String,
     val arguments: List<NamedNavArgument>
 ) {
-
     object Splash: MainScreen(
         route = "splash",
         arguments = emptyList()
