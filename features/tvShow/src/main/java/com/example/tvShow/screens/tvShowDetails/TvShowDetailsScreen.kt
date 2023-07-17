@@ -24,11 +24,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RateReview
 import androidx.compose.material.icons.outlined.HeartBroken
 import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,12 +44,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.components.AppDrawer
 import com.example.domain.model.tvList.TvShow
+import com.example.navigation.screens.TvShowScreen
 import com.example.tvShow.R
 import com.example.tvShow.screens.tvShow.TvShowListState
+import kotlinx.coroutines.launch
 
 @Composable
 fun TvShowDetailsScreen(
@@ -55,6 +62,15 @@ fun TvShowDetailsScreen(
     networkStatus: MutableState<Boolean>,
     state: TvShowListState,
 ) {
+
+    val navController = rememberNavController()
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute =
+        navBackStackEntry?.destination?.route ?: TvShowScreen.TvShowDetails.route
+
+    val coroutineScope = rememberCoroutineScope()
+
     state.selectedTvShow?.let {
         CoverAndProfileImage(
             tvShow = state.selectedTvShow!!, imageLoader = imageLoader

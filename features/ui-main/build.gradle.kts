@@ -1,4 +1,4 @@
-apply{
+apply {
     from("$rootDir/android-library-build.gradle")
 }
 
@@ -20,5 +20,9 @@ dependencies {
     "implementation"(Coil.coil)
 
     //icon
-    "implementation" (Compose.icons)
+    "implementation"(Compose.icons)
+
+    //Material3
+    "implementation"(Compose.material3)
+    "implementation"(Compose.materialWindowSize)
 }

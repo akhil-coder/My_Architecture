@@ -22,7 +22,8 @@ internal object InternalMyListNavigation : FeatureNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit
     ) {
 
         navGraphBuilder.navigation(
@@ -43,6 +44,7 @@ internal object InternalMyListNavigation : FeatureNavigation {
                     imageLoader = imageLoader,
                     stateFav = favoriteViewModel.favoriteState.value,
                     eventFav = favoriteViewModel::onEventChange,
+                    openDrawer = { openDrawer() }
                 )
             }
 

@@ -18,4 +18,9 @@ object Compose {
     const val icons = "androidx.compose.material:material-icons-extended:$iconsVersion"
 
     const val constraints = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+
+    private const val materialNew = "1.1.1"
+    const val material3 = "androidx.compose.material3:material3:$materialNew"
+
+    const val materialWindowSize = "androidx.compose.material3:material3-window-size-class:$materialNew"
 }

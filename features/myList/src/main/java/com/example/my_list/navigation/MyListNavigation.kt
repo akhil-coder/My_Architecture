@@ -15,8 +15,15 @@ class MyListNavigationImpl : MyListNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit
     ) {
-        InternalMyListNavigation.registerGraph(navController, navGraphBuilder, imageLoader, width, networkStatus)
+        InternalMyListNavigation.registerGraph(
+            navController,
+            navGraphBuilder,
+            imageLoader,
+            width,
+            networkStatus
+        )
     }
 }

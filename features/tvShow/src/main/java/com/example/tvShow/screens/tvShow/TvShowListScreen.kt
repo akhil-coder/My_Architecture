@@ -49,21 +49,22 @@ fun TvShowListScreen(
     navigateToDetailsScreen: () -> Unit,
     savedStateHandle: SavedStateHandle?,
     viewModel: TvShowListViewModel,
+    openDrawer: () -> Unit
 ) {
     DefaultScreenUI(
         networkStatus = networkStatus.value, queue = state.errorQueue, onRemoveHeadFromQueue = {
             event(TvShowListEvents.OnRemoveHeadFromQueue)
-        }, progressBarState = state.progressBarState
-    ) {
-        TvShowList(
-            viewModel = viewModel,
-            state = state,
-            imageLoader = imageLoader,
-            navigateToDetailsScreen = navigateToDetailsScreen,
-            event = event,
-            savedStateHandle = savedStateHandle
-        )
-    }
+        }, progressBarState = state.progressBarState, openDrawer = { openDrawer() },
+        content = {
+            TvShowList(
+                viewModel = viewModel,
+                state = state,
+                imageLoader = imageLoader,
+                navigateToDetailsScreen = navigateToDetailsScreen,
+                event = event,
+                savedStateHandle = savedStateHandle
+            )
+        })
     viewModel.printData()
 
 }

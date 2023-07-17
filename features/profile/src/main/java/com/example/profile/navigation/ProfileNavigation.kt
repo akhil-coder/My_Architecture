@@ -16,8 +16,15 @@ class ProfileNavigationImpl : ProfileNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit
     ) {
-        InternalProfileNavigation.registerGraph(navController, navGraphBuilder, imageLoader, width, networkStatus)
+        InternalProfileNavigation.registerGraph(
+            navController,
+            navGraphBuilder,
+            imageLoader,
+            width,
+            networkStatus
+        )
     }
 }

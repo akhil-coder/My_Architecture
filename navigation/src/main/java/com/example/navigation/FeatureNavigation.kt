@@ -12,6 +12,7 @@ interface FeatureNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit = {}
     )
 }

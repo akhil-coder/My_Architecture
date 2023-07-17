@@ -23,7 +23,8 @@ internal object InternalAuthNavigation : FeatureNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit
     ) {
         navGraphBuilder.navigation(
             startDestination = AuthScreen.Login.route, route = GraphRoute.authRoute

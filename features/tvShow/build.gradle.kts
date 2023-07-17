@@ -26,4 +26,6 @@ dependencies {
     //Constraints
     "implementation"(Compose.constraints)
 
+    //Material3
+    "implementation"(Compose.material3)
 }
