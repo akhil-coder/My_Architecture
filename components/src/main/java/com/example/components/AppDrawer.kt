@@ -50,7 +50,7 @@ fun AppDrawer(
         NavigationDrawerItem(
             label = { Text("Tv Shows") },
             icon = { Icon(Icons.Filled.Home, null) },
-            selected = currentRoute == TvShowScreen.TvShowDetails.route,
+            selected = currentRoute == TvShowScreen.TvShowList.route,
             onClick = { navigateToHome(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )

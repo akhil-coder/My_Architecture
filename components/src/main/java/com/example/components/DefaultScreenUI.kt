@@ -192,7 +192,7 @@ private fun HomeTopAppBar(
         },
         navigationIcon = {
             IconButton(onClick = {
-                openDrawer
+                openDrawer()
             }) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_temple_buddhist_24),

@@ -19,7 +19,7 @@ fun AppNavGraph(
     navigationProvider: NavigationProvider,
     networkStatus: MutableState<Boolean>,
     widthSizeClass: WindowWidthSizeClass,
-    openDrawer:  () -> Unit = {}
+    openDrawer: () -> Unit = {}
 ) {
 
     BoxWithConstraints {
@@ -31,7 +31,7 @@ fun AppNavGraph(
         ) {
 
             navigationProvider.uiMainNavigation.registerGraph(
-                navController, this, imageLoader, width, networkStatus
+                navController, this, imageLoader, width, networkStatus, openDrawer
             )
 
             navigationProvider.tvShowScreenNavigation.registerGraph(

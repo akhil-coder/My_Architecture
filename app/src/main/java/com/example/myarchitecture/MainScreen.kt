@@ -109,7 +109,7 @@ fun MainScreen(
         drawerContent = {
             AppDrawer(
                 currentRoute = currentRoute,
-                navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowDetails.route}") },
+                navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
                 closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
             )
         },
@@ -118,10 +118,10 @@ fun MainScreen(
         gesturesEnabled = !isExpandedScreen
     ) {
         Row {
-            if (isExpandedScreen) {
+            if (isExpandedScreen) {  // For Tab Screens only
                 AppNavRail(
                     currentRoute = currentRoute,
-                    navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowDetails.route}") },
+                    navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
                 )
             }
             AppNavGraph(
@@ -130,7 +130,9 @@ fun MainScreen(
                 imageLoader = imageLoader,
                 navigationProvider = navigationProvider,
                 networkStatus = networkStatus,
-                openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
+                openDrawer = { coroutineScope.launch {
+                    sizeAwareDrawerState.open()
+                } },
             )
         }
     }
