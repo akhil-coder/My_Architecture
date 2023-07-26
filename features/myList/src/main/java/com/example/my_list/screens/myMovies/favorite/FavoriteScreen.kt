@@ -32,7 +32,8 @@ import me.saket.swipe.SwipeableActionsBox
 fun FavoriteScreen(
     imageLoader: ImageLoader,
     state: FavoriteState,
-    event: (FavoriteEvents) -> Unit
+    event: (FavoriteEvents) -> Unit,
+    openDrawer: () -> Unit
 ) {
 
     DefaultScreenUI(
@@ -43,15 +44,15 @@ fun FavoriteScreen(
         progressBarState = state.progressBarState,
         onSnackBarAction = {
             event(FavoriteEvents.RestoreFavorite)
-        }
-    ) {
+        },
+        content = {
 
-        movieList(
-            state,
-            imageLoader = imageLoader,
-            event
-        )
-    }
+            movieList(
+                state,
+                imageLoader = imageLoader,
+                event
+            )
+        }, openDrawer = { openDrawer() })
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -68,17 +69,17 @@ fun movieList(
             .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
-    ){
+    ) {
 
 
         //items(state.movies){ movieItem ->
 
         itemsIndexed(
-            items= state.movies,
-            key={index,item->
+            items = state.movies,
+            key = { index, item ->
                 item.hashCode()
             }
-        ){index,movieItem ->
+        ) { index, movieItem ->
 
             val delete = SwipeAction(
                 icon = rememberVectorPainter(Icons.TwoTone.Delete),
@@ -136,8 +137,6 @@ fun movieList(
                 },
                 directions=setOf(DismissDirection.EndToStart)
             )*/
-
-
 
 
         }

@@ -2,12 +2,14 @@ package com.example.myarchitecture.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import coil.ImageLoader
 import com.example.navigation.GraphRoute
 import com.google.accompanist.navigation.animation.AnimatedNavHost
+import kotlinx.coroutines.Job
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -15,7 +17,9 @@ fun AppNavGraph(
     navController: NavHostController,
     imageLoader: ImageLoader,
     navigationProvider: NavigationProvider,
-    networkStatus: MutableState<Boolean>
+    networkStatus: MutableState<Boolean>,
+    widthSizeClass: WindowWidthSizeClass,
+    openDrawer: () -> Unit = {}
 ) {
 
     BoxWithConstraints {
@@ -27,11 +31,11 @@ fun AppNavGraph(
         ) {
 
             navigationProvider.uiMainNavigation.registerGraph(
-                navController, this, imageLoader, width, networkStatus
+                navController, this, imageLoader, width, networkStatus, openDrawer
             )
 
             navigationProvider.tvShowScreenNavigation.registerGraph(
-                navController, this, imageLoader, width, networkStatus
+                navController, this, imageLoader, width, networkStatus, openDrawer
             )
 
             navigationProvider.authNavigation.registerGraph(

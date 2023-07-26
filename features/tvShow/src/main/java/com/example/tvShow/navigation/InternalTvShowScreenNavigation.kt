@@ -27,7 +27,8 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit
     ) {
         navGraphBuilder.navigation(
             startDestination = TvShowScreen.TvShowList.route, route = GraphRoute.tvShowRoute
@@ -38,14 +39,13 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                         durationMillis = 300,
                     )
                 ) + fadeOut(animationSpec = tween(durationMillis = 300))
-            },
-                popEnterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { -width }, animationSpec = tween(
-                            durationMillis = 300,
-                        )
-                    ) + fadeIn(animationSpec = tween(durationMillis = 300))
-                }) {
+            }, popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { -width }, animationSpec = tween(
+                        durationMillis = 300,
+                    )
+                ) + fadeIn(animationSpec = tween(durationMillis = 300))
+            }) {
 
                 val tvShowListViewModel = hiltViewModel<TvShowListViewModel>()
                 Log.e("Network::", "composable : $networkStatus ")
@@ -58,7 +58,8 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                     navigateToDetailsScreen = {
                         navController.navigate(route = "${TvShowScreen.TvShowDetails.route}")
                     },
-                    savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+                    savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
+                    openDrawer = { openDrawer() }
                 )
             }
 
@@ -85,9 +86,6 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                 }
                 val tvShowListViewModel = hiltViewModel<TvShowListViewModel>(parentEntry)
 
-                //val id = navBackStack.arguments?.getString("movieId") ?: ""
-
-                val tvShowDetailsViewModel = hiltViewModel<TvShowDetailsViewModel>()
                 TvShowDetailsScreen(
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,

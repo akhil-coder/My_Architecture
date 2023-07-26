@@ -26,7 +26,8 @@ internal object InternalMovieNavigation : FeatureNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit
     ) {
 
         navGraphBuilder.navigation(
@@ -56,7 +57,7 @@ internal object InternalMovieNavigation : FeatureNavigation {
             ) {
 
                 val movieListViewModel = hiltViewModel<MovieListViewModel>()
-                Log.e("Network::", "composable : $networkStatus ", )
+                Log.e("Network::", "composable : $networkStatus ")
                 MovieListScreen(
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,
@@ -65,7 +66,8 @@ internal object InternalMovieNavigation : FeatureNavigation {
                     navigateToDetailsScreen = { id ->
                         navController.navigate(route = "${MovieScreen.MovieDetail.route}/$id")
                     },
-                    savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+                    savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
+                    openDrawer = { openDrawer() }
                 )
             }
 
@@ -106,7 +108,8 @@ internal object InternalMovieNavigation : FeatureNavigation {
                             }
                         }
                         navController.popBackStack()
-                    }
+                    },
+                    openDrawer = { openDrawer() }
                 )
             }
 

@@ -42,6 +42,7 @@ fun MovieListScreen(
     event: (MovieListEvents) -> Unit,
     savedStateHandle: SavedStateHandle?,
     navigateToDetailsScreen: (String) -> Unit,
+    openDrawer: () -> Unit
 ) {
 
     if (savedStateHandle != null) {
@@ -72,8 +73,7 @@ fun MovieListScreen(
         onRemoveHeadFromQueue = {
             event(MovieListEvents.OnRemoveHeadFromQueue)
         },
-        progressBarState = state.progressBarState
-    ) {
+        progressBarState = state.progressBarState, content = {
 
         MovieList(
             state,
@@ -81,25 +81,7 @@ fun MovieListScreen(
             navigateToDetailsScreen,
             event
         )
-
-        /*Scaffold(
-            topBar =  {
-                TopAppBar(
-                    title = {
-                        Text(text = "Home")
-                    },
-                    elevation = 4.dp
-                )
-            },
-        ) {
-            movieList(
-                state,
-                imageLoader = imageLoader,
-                navigateToDetailsScreen,
-                event
-            )
-        }*/
-    }
+    }, openDrawer = { openDrawer() })
 }
 
 @OptIn(ExperimentalFoundationApi::class)

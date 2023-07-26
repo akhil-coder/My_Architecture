@@ -15,14 +15,16 @@ class TvShowScreenNavigationImpl : TvShowScreenNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit
     ) {
         InternalTvShowScreenNavigation.registerGraph(
             navController,
             navGraphBuilder,
             imageLoader,
             width,
-            networkStatus
+            networkStatus,
+            openDrawer
         ) // This one.
     }
 }

@@ -34,7 +34,8 @@ fun MovieDetailsScreen(
     networkStatus: MutableState<Boolean>,
     state: MovieDetailsState,
     event: (MovieDetailsEvents) -> Unit,
-    backWithResult: (Map<String, Any>?) -> Unit
+    backWithResult: (Map<String, Any>?) -> Unit,
+    openDrawer: () -> Unit
 ) {
 
     DefaultScreenUI(
@@ -44,14 +45,16 @@ fun MovieDetailsScreen(
         onRemoveHeadFromQueue = {
             event(MovieDetailsEvents.OnRemoveHeadFromQueue)
         },
-        progressBarState = state.progressBarState
-    ) {
-        movieDetail(
-            state,
-            imageLoader = imageLoader,
-            event
-        )
-    }
+        progressBarState = state.progressBarState,
+        content = {
+            movieDetail(
+                state,
+                imageLoader = imageLoader,
+                event
+            )
+        },
+        openDrawer = { openDrawer() }
+    )
 }
 
 @Composable

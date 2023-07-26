@@ -8,6 +8,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -45,13 +47,16 @@ class MainActivity : AppCompatActivity() {
         connectivityManager.unregisterConnectionObserver(this)
     }
 
-    @OptIn(ExperimentalAnimationApi::class)
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
+
             AppContent(viewModel) {
                 val navController = rememberAnimatedNavController()//rememberNavController()
                 MainScreen(
+                    widthSizeClass = widthSizeClass,
                     navController = navController,
                     imageLoader = imageLoader,
                     navigationProvider = navigationProvider,

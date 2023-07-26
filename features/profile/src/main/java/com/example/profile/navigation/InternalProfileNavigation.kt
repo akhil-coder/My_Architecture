@@ -22,7 +22,8 @@ internal object InternalProfileNavigation : FeatureNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit
     ) {
 
         navGraphBuilder.navigation(
@@ -38,7 +39,8 @@ internal object InternalProfileNavigation : FeatureNavigation {
                     networkStatus = networkStatus,
                     navigateToProfileEditsScreen = {
                         navController.navigate(route = ProfileScreen.ProfileEdit.route)
-                    }
+                    },
+                    openDrawer = { openDrawer() }
                 )
             }
 

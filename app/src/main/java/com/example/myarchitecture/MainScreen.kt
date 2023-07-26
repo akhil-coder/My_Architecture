@@ -1,8 +1,8 @@
 package com.example.myarchitecture
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +10,6 @@ import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.DrawerState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -22,10 +21,12 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,21 +65,28 @@ import com.example.navigation.screens.MyMoviesScreen
 import com.example.navigation.screens.ProfileScreen
 import com.example.navigation.screens.TvShowScreen
 import kotlinx.coroutines.launch
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
+import com.example.components.AppDrawer
+import com.example.components.AppNavRail
 
 @Composable
 fun MainScreen(
     navController: NavHostController,
     imageLoader: ImageLoader,
     navigationProvider: NavigationProvider,
-    networkStatus: MutableState<Boolean>
+    networkStatus: MutableState<Boolean>,
+    widthSizeClass: WindowWidthSizeClass
 ) {
     val context = LocalContext.current
 
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+    val currentRoute = navBackStackEntry?.destination?.route ?: MainScreen.HomeScreen.route
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
+    val sizeAwareDrawerState = rememberSizeAwareDrawerState(isExpandedScreen)
 
     val isDialogVisible = rememberSaveable {
         mutableStateOf(false)
@@ -97,126 +105,35 @@ fun MainScreen(
         )
     )
 
-
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            when (currentDestination?.route) {
-                MainScreen.HomeScreen.route -> {
-                    AppBarDrawer(
-                        title = stringResource(R.string.utils), onNavigationItemClick = {
-                            scope.launch {
-                                scaffoldState.drawerState.open()
-                            }
-                        }, onSearchItemClick = null
-                    )
-                }
-
-                TvShowScreen.TvShowList.route -> {
-
-                }
-            }
-        },
-        bottomBar = {
-            BottomNavigationBar(items = items, navController = navController, onItemClick = {
-                navController.navigate(it.route) {
-                    popUpTo(route = TvShowScreen.TvShowList.route)
-                    launchSingleTop = true
-                }
-            })
-
-
-        },
-        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+    ModalNavigationDrawer(
         drawerContent = {
-            DrawerHeader(imageLoader)
-            DrawerBody(items = listOf(
-                MenuItem(
-                    id = "myList",
-                    title = stringResource(R.string.my_movies),
-                    contentDescription = "Go to my movies screen",
-                    icon = Icons.Default.FavoriteBorder
-                ),
-                MenuItem(
-                    id = "settings",
-                    title = stringResource(R.string.settings),
-                    contentDescription = "Go to my settings screen",
-                    icon = Icons.Default.Settings
-                ),
-                MenuItem(
-                    id = "utils",
-                    title = stringResource(R.string.utils),
-                    contentDescription = "Go to utils screen",
-                    icon = Icons.Default.Build
-                ),
-            ), logOut = {
-                scope.launch {
-                    scaffoldState.drawerState.close()
-                    isDialogVisible.value = true
-                }
-
-            }) { item ->
-                Log.e("DRAWABLE::", "MovieScreen: clicked ${item.title}")
-                scope.launch {
-
-                    when (item.id) {
-                        "myList" -> {
-                            navController.navigate(route = MyMoviesScreen.MyMovies.route)
-                        }
-
-                        "settings" -> {
-                            navController.navigate(route = MainScreen.Settings.route)
-                        }
-
-                        "utils" -> {
-                            navController.navigate(route = MainScreen.Utils.route)
-                        }
-                    }
-                    scaffoldState.drawerState.close()
-                }
-            }
+            AppDrawer(
+                currentRoute = currentRoute,
+                navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
+                closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
+            )
         },
-        drawerShape = NavShape(0.dp, 0.8f),
+        drawerState = sizeAwareDrawerState,
+        // Only enable opening the drawer via gestures if the screen is not expanded
+        gesturesEnabled = !isExpandedScreen
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-        ) {
+        Row {
+            if (isExpandedScreen) {  // For Tab Screens only
+                AppNavRail(
+                    currentRoute = currentRoute,
+                    navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
+                )
+            }
             AppNavGraph(
+                widthSizeClass = widthSizeClass,
                 navController = navController,
                 imageLoader = imageLoader,
                 navigationProvider = navigationProvider,
-                networkStatus = networkStatus
+                networkStatus = networkStatus,
+                openDrawer = { coroutineScope.launch {
+                    sizeAwareDrawerState.open()
+                } },
             )
-
-            if (isDialogVisible.value) {
-                ConfirmDialog(isDialogVisible = isDialogVisible.value,
-                    title = stringResource(R.string.logout_confirmation),
-                    message = stringResource(R.string.logout_confirmation_message),
-                    positiveButtonText = stringResource(com.example.ui_main.R.string.ok),
-                    negativeButtonText = stringResource(com.example.ui_main.R.string.cancel),
-                    onDismissed = {
-                        isDialogVisible.value = false
-                    },
-                    onNegativeButtonClicked = {
-                        isDialogVisible.value = false
-                    }) {
-
-                    navController.navigate(route = AuthScreen.Login.route) {
-                        popUpTo(route = TvShowScreen.TvShowList.route) {
-                            inclusive = true
-                        }
-                    }
-                    isDialogVisible.value = false
-                }/*ShowLogoutConfirmationDialog(isDialogVisible) {
-                    navController.navigate(route = AuthScreen.Login.route) {
-                        popUpTo(route = MovieScreen.MovieList.route) {
-                            inclusive = true
-                        }
-                    }
-                }*/
-            }
         }
     }
 }
@@ -300,5 +217,25 @@ class NavShape(
                 )
             )
         )
+    }
+}
+
+/**
+ * Determine the drawer state to pass to the modal drawer.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun rememberSizeAwareDrawerState(isExpandedScreen: Boolean): DrawerState {
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+
+    return if (!isExpandedScreen) {
+        // If we want to allow showing the drawer, we use a real, remembered drawer
+        // state defined above
+        drawerState
+    } else {
+        // If we don't want to allow the drawer to be shown, we provide a drawer state
+        // that is locked closed. This is intentionally not remembered, because we
+        // don't want to keep track of any changes and always keep it closed
+        DrawerState(DrawerValue.Closed)
     }
 }

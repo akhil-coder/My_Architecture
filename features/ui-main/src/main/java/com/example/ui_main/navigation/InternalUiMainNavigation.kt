@@ -29,7 +29,8 @@ internal object InternalUiMainNavigation : FeatureNavigation {
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
-        networkStatus: MutableState<Boolean>
+        networkStatus: MutableState<Boolean>,
+        openDrawer: () -> Unit
     ) {
 
         navGraphBuilder.navigation(
@@ -73,7 +74,9 @@ internal object InternalUiMainNavigation : FeatureNavigation {
                                 inclusive = false
                             }
                         }
-                    })
+                    },
+                    openDrawer = { openDrawer() }
+                )
             }
 
             composable(
@@ -111,10 +114,9 @@ internal object InternalUiMainNavigation : FeatureNavigation {
                     event = utilsViewModel::onEventChange,
                     popBack = {
                         navController.popBackStack()
-                    },
+                    }, openDrawer = { openDrawer() }
                 )
             }
-
         }
     }
 }

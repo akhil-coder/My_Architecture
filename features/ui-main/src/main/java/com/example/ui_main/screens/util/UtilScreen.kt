@@ -24,46 +24,42 @@ import com.example.components.buttons.CustomButton
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun UtilScreen(
-    state: UtilState,
-    event: (UtilEvents) -> Unit,
-    popBack: () -> Unit
+    state: UtilState, event: (UtilEvents) -> Unit, popBack: () -> Unit, openDrawer: () -> Unit
 ) {
 
-    val bitmap = remember{ mutableStateOf<Bitmap?>(null)}
-    val openCamera = remember{ mutableStateOf<Boolean>(false)}
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+    val openCamera = remember { mutableStateOf<Boolean>(false) }
 
     val permissionsToRequest = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.RECORD_AUDIO,
     )
 
-    val multiplePermissionResultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions(),
-        onResult = { perms ->
-            var granded = true
-            permissionsToRequest.forEach { permission ->
-                Log.e("PERM::", "$permission: ${perms[permission] == true}", )
-                if(perms[permission] != true) granded = false
-                event(
-                    UtilEvents.AddPermission(
-                        permission = permission,
-                        isGranted = perms[permission] == true
+    val multiplePermissionResultLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions(),
+            onResult = { perms ->
+                var granded = true
+                permissionsToRequest.forEach { permission ->
+                    Log.e("PERM::", "$permission: ${perms[permission] == true}")
+                    if (perms[permission] != true) granded = false
+                    event(
+                        UtilEvents.AddPermission(
+                            permission = permission, isGranted = perms[permission] == true
+                        )
                     )
-                )
-            }
-            if(granded){
-               openCamera.value = true
-            }
-        }
-    )
+                }
+                if (granded) {
+                    openCamera.value = true
+                }
+            })
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicturePreview()){
+        contract = ActivityResultContracts.TakePicturePreview()
+    ) {
         bitmap.value = it
     }
 
-    DefaultScreenUI(
-        queue = state.errorQueue,
+    DefaultScreenUI(queue = state.errorQueue,
         permissionQueue = state.permissionQueue,
         onRemoveHeadFromQueue = {
             event(UtilEvents.OnRemoveHeadFromQueue)
@@ -75,16 +71,14 @@ fun UtilScreen(
             multiplePermissionResultLauncher.launch(
                 arrayOf(permission)
             )
-        }
-    ) {
+        },
+        content = {
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
+            Scaffold(
+                topBar = {
+                    TopAppBar(title = {
                         Text(text = "Utils Screen", color = Color.White)
-                    },
-                    navigationIcon = {
+                    }, navigationIcon = {
                         IconButton(onClick = { popBack() }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
@@ -92,20 +86,27 @@ fun UtilScreen(
                                 tint = Color.White
                             )
                         }
-                    }
+                    })
+                },
+
+                ) {
+                SetContent(
+                    state,
+                    event,
+                    permissionsToRequest,
+                    multiplePermissionResultLauncher,
+                    bitmap.value
                 )
-            },
-
-            ) {
-            SetContent(state, event, permissionsToRequest, multiplePermissionResultLauncher, bitmap.value)
-            if(openCamera.value){
-                launcher.launch()
-                openCamera.value = false
+                if (openCamera.value) {
+                    launcher.launch()
+                    openCamera.value = false
+                }
             }
-        }
 
-    }
+        },
+        openDrawer = { openDrawer() })
 }
+
 
 @Composable
 fun SetContent(
@@ -130,7 +131,11 @@ fun SetContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         bitmap?.let {
-            Image(bitmap = bitmap.asImageBitmap(), contentDescription = "", modifier = Modifier.size(200.dp))
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = "",
+                modifier = Modifier.size(200.dp)
+            )
         }
 
     }

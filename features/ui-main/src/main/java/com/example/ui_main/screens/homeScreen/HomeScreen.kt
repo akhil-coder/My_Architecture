@@ -43,37 +43,41 @@ fun HomeScreen(
     networkStatus: MutableState<Boolean>,
     state: HomeUiState,
     event: (HomeUiEvents) -> Unit,
-    navigateToTvShows: () -> Unit
+    navigateToTvShows: () -> Unit,
+    openDrawer: () -> Unit
 ) {
 
     SDUIDisplayManager.navigateToTvShows = navigateToTvShows
 
-    DefaultScreenUI(
-        networkStatus = networkStatus.value, queue = state.errorQueue, onRemoveHeadFromQueue = {
+    DefaultScreenUI(networkStatus = networkStatus.value,
+        queue = state.errorQueue,
+        onRemoveHeadFromQueue = {
             event(HomeUiEvents.OnRemoveHeadFromQueue)
-        }, progressBarState = state.progressBarState
-    ) {
-        Box(
-            modifier = Modifier
-                .background(Color.White)
-                .fillMaxSize()
-        ) {
-            Column {
-                Spacer(modifier = Modifier.height(16.dp))
-                LazyColumn(
-                    Modifier.fillMaxSize()
-                ) {
-                    item {
-                        state.homeUi?.let { it ->
-                            SDUIDisplayManager.RootDisplay(
-                                it
-                            )
+        },
+        progressBarState = state.progressBarState,
+        openDrawer = { openDrawer() },
+        content = {
+            Box(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxSize()
+            ) {
+                Column {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    LazyColumn(
+                        Modifier.fillMaxSize()
+                    ) {
+                        item {
+                            state.homeUi?.let { it ->
+                                SDUIDisplayManager.RootDisplay(
+                                    it
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
-    }
+        })
 }
 
 @Composable
@@ -159,3 +163,5 @@ fun CurrentMeditation(
         }
     }
 }
+
+

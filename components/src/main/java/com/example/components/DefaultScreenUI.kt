@@ -7,17 +7,28 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarState
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.core.app.ActivityCompat
 import com.example.components.dialogs.permission.CameraPermissionTextProvider
 import com.example.components.dialogs.permission.PermissionDialog
@@ -33,12 +44,13 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DefaultScreenUI(
     networkStatus: Boolean = true,
-    appBar:@Composable () -> Unit = {},
-    bottomBar:@Composable () -> Unit = {},
+    appBar: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
     queue: Queue<UIComponent> = Queue(mutableListOf()),
     permissionQueue: Queue<String> = Queue(mutableListOf()),
     onRemoveHeadFromQueue: () -> Unit = {},
@@ -47,46 +59,54 @@ fun DefaultScreenUI(
     progressBarState: ProgressBarState = ProgressBarState.Idle,
     onSnackBarAction: () -> Unit = {},
     content: @Composable () -> Unit,
-){
+    openDrawer: () -> Unit
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
+
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = appBar,
+        topBar = {
+            HomeTopAppBar(
+                openDrawer = openDrawer,
+                topAppBarState = topAppBarState
+            )
+        },
         bottomBar = bottomBar
-    ){
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
-        ){
-            Column{
+        ) {
+            Column {
                 ConnectivityMonitor(isNetworkAvailable = networkStatus)
                 content()
             }
             // process the queue
-            if(!queue.isEmpty()){
+            if (!queue.isEmpty()) {
                 queue.peek()?.let { uiComponent ->
-                    if(uiComponent is UIComponent.Dialog){
+                    if (uiComponent is UIComponent.Dialog) {
                         GenericDialog(
                             modifier = Modifier
-                                .fillMaxWidth(0.9f)
-                            ,
+                                .fillMaxWidth(0.9f),
                             title = uiComponent.title,
                             description = uiComponent.description,
                             onRemoveHeadFromQueue = onRemoveHeadFromQueue
                         )
-                    } else if(uiComponent is UIComponent.SnackBar){
+                    } else if (uiComponent is UIComponent.SnackBar) {
                         scope.launch {
                             val result = scaffoldState.snackbarHostState.showSnackbar(
                                 message = uiComponent.message,
                                 actionLabel = uiComponent.action,
                                 duration = SnackbarDuration.Short
                             )
-                            if(result == SnackbarResult.ActionPerformed) {
+                            if (result == SnackbarResult.ActionPerformed) {
                                 onSnackBarAction()
                                 onRemoveHeadFromQueue()
                             }
@@ -97,19 +117,22 @@ fun DefaultScreenUI(
             }
 
             // process the permission
-            if(!permissionQueue.isEmpty()) {
+            if (!permissionQueue.isEmpty()) {
                 permissionQueue.peek()?.let { permission ->
                     PermissionDialog(
                         permissionTextProvider = when (permission) {
                             Manifest.permission.CAMERA -> {
                                 CameraPermissionTextProvider()
                             }
+
                             Manifest.permission.RECORD_AUDIO -> {
                                 RecordAudioPermissionTextProvider()
                             }
+
                             Manifest.permission.CALL_PHONE -> {
                                 PhoneCallPermissionTextProvider()
                             }
+
                             else -> return@let
                         },
                         isPermanentlyDeclined = !ActivityCompat.shouldShowRequestPermissionRationale(
@@ -135,7 +158,7 @@ fun DefaultScreenUI(
             }
 
 
-            if(progressBarState is ProgressBarState.Loading){
+            if (progressBarState is ProgressBarState.Loading) {
                 CircularIndeterminateProgressBar()
             }
         }
@@ -145,5 +168,54 @@ fun DefaultScreenUI(
 @Composable
 fun ShowNetworkStatus(networkState: ConnectivityObserver.Status, scaffoldState: ScaffoldState) {
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HomeTopAppBar(
+    openDrawer: () -> Unit,
+    modifier: Modifier = Modifier,
+    topAppBarState: TopAppBarState = rememberTopAppBarState(),
+    scrollBehavior: TopAppBarScrollBehavior? =
+        TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+) {
+    val context = LocalContext.current
+    val title = "Home Screen"
+    CenterAlignedTopAppBar(
+        title = {
+            Image(
+                painter = painterResource(R.drawable.baseline_temple_buddhist_24),
+                contentDescription = title,
+                contentScale = ContentScale.Inside,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+                openDrawer()
+            }) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_temple_buddhist_24),
+                    contentDescription = "Opens Drawer",
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = {
+                Toast.makeText(
+                    context,
+                    "Search is not yet implemented in this configuration",
+                    Toast.LENGTH_LONG
+                ).show()
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Search"
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior,
+        modifier = modifier
+    )
 }
 

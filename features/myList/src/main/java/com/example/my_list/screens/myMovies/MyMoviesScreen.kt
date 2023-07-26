@@ -32,7 +32,8 @@ fun MyMoviesScreen(
     popBack: () -> Unit,
     imageLoader: ImageLoader,
     stateFav: FavoriteState,
-    eventFav: (FavoriteEvents) -> Unit
+    eventFav: (FavoriteEvents) -> Unit,
+    openDrawer: () -> Unit
 ) {
 
     val pagerState = rememberPagerState()
@@ -48,6 +49,7 @@ fun MyMoviesScreen(
                     imageLoader = imageLoader,
                     state = stateFav,
                     event = eventFav,
+                    openDrawer = { openDrawer() }
                 )
             }
         ),
@@ -59,7 +61,7 @@ fun MyMoviesScreen(
         )
     )
 
-    BackHandler(pagerState.currentPage != 0 ) {
+    BackHandler(pagerState.currentPage != 0) {
         scope.launch {
             pagerState.animateScrollToPage(0)
         }
@@ -72,7 +74,7 @@ fun MyMoviesScreen(
                     Text(text = stringResource(R.string.my_movies), color = Color.White)
                 },
                 navigationIcon = {
-                    IconButton(onClick =  popBack ) {
+                    IconButton(onClick = popBack) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back pressed",

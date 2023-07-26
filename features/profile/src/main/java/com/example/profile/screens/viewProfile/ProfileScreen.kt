@@ -26,7 +26,8 @@ import com.example.profile.R
 fun ProfileScreen(
     imageLoader: ImageLoader,
     networkStatus: MutableState<Boolean>,
-    navigateToProfileEditsScreen: () -> Unit
+    navigateToProfileEditsScreen: () -> Unit,
+    openDrawer: () -> Unit
 ) {
 
     var menuExpanded = remember {
@@ -45,55 +46,56 @@ fun ProfileScreen(
     DefaultScreenUI(
         networkStatus = networkStatus.value,
         appBar = { CustomAppBar(menuExpanded) },
-    ) {
+        openDrawer = { openDrawer() },
+        content = {
 
-        Column(modifier = Modifier.padding(12.dp)) {
+            Column(modifier = Modifier.padding(12.dp)) {
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box() {
-                    CircleProfileImage(
-                        imageLoader = imageLoader,
-                        uri = selectedImageUri
-                    )
-                    IconButton(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .size(24.dp),
-                        onClick = {
-                            singlePhotoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box() {
+                        CircleProfileImage(
+                            imageLoader = imageLoader,
+                            uri = selectedImageUri
+                        )
+                        IconButton(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .size(24.dp),
+                            onClick = {
+                                singlePhotoPickerLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit profile pic"
                             )
                         }
+                    }
+                    Column(
+                        modifier = Modifier.padding(start = 12.dp),
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit profile pic"
+                        Text(
+                            text = "Name",
+                            style = MaterialTheme.typography.h6
+                        )
+                        Text(
+                            text = "name@email.com",
+                            style = MaterialTheme.typography.caption
                         )
                     }
                 }
-                Column(
-                    modifier = Modifier.padding(start = 12.dp),
-                ) {
-                    Text(
-                        text = "Name",
-                        style = MaterialTheme.typography.h6
-                    )
-                    Text(
-                        text = "name@email.com",
-                        style = MaterialTheme.typography.caption
-                    )
-                }
+                Divider(
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
+                    thickness = 2.dp,
+                )
+
             }
-            Divider(
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
-                thickness = 2.dp,
-            )
 
-        }
-
-    }
+        })
     if (menuExpanded.value)
         ShowPopUpMenuDialog(menuExpanded, navigateToProfileEditsScreen)
 }
@@ -102,7 +104,7 @@ fun ProfileScreen(
 fun CustomAppBar(menuExpanded: MutableState<Boolean>) {
     TopAppBar(
         title = {
-            Text(text = stringResource(R.string.profile) , color = Color.White)
+            Text(text = stringResource(R.string.profile), color = Color.White)
         },
         elevation = 4.dp,
         actions = {
