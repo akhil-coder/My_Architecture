@@ -51,10 +51,13 @@ fun TvShowListScreen(
     viewModel: TvShowListViewModel,
     openDrawer: () -> Unit
 ) {
-    DefaultScreenUI(
-        networkStatus = networkStatus.value, queue = state.errorQueue, onRemoveHeadFromQueue = {
+    DefaultScreenUI(networkStatus = networkStatus.value,
+        queue = state.errorQueue,
+        onRemoveHeadFromQueue = {
             event(TvShowListEvents.OnRemoveHeadFromQueue)
-        }, progressBarState = state.progressBarState, openDrawer = { openDrawer() },
+        },
+        progressBarState = state.progressBarState,
+        openDrawer = { openDrawer() },
         content = {
             TvShowList(
                 viewModel = viewModel,
@@ -66,7 +69,6 @@ fun TvShowListScreen(
             )
         })
     viewModel.printData()
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)

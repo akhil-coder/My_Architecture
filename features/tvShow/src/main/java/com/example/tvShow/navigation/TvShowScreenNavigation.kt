@@ -23,7 +23,8 @@ class TvShowScreenNavigationImpl : TvShowScreenNavigation {
             navGraphBuilder,
             imageLoader,
             width,
-            networkStatus
+            networkStatus,
+            openDrawer
         ) // This one.
     }
 }
