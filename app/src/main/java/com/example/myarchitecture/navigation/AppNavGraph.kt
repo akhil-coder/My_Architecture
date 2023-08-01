@@ -1,20 +1,19 @@
 package com.example.myarchitecture.navigation
 
+import com.example.navigation.JetsnackNavController
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.navigation.NavHostController
 import coil.ImageLoader
 import com.example.navigation.GraphRoute
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import kotlinx.coroutines.Job
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppNavGraph(
-    navController: NavHostController,
+    navController: JetsnackNavController,
     imageLoader: ImageLoader,
     navigationProvider: NavigationProvider,
     networkStatus: MutableState<Boolean>,
@@ -27,7 +26,7 @@ fun AppNavGraph(
         val width = constraints.maxWidth / 2
 
         AnimatedNavHost(
-            navController = navController, startDestination = GraphRoute.uiMainRoute
+            navController = navController.navController, startDestination = GraphRoute.uiMainRoute
         ) {
 
             navigationProvider.uiMainNavigation.registerGraph(

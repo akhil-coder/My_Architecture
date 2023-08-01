@@ -11,6 +11,7 @@ import com.example.my_list.screens.myMovies.MyMoviesScreen
 import com.example.my_list.screens.myMovies.favorite.FavoriteViewModel
 import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
+import com.example.navigation.JetsnackNavController
 import com.example.navigation.screens.MyMoviesScreen
 import com.google.accompanist.navigation.animation.composable
 
@@ -18,7 +19,7 @@ internal object InternalMyListNavigation : FeatureNavigation {
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun registerGraph(
-        navController: NavHostController,
+        navController: JetsnackNavController,
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
@@ -39,7 +40,7 @@ internal object InternalMyListNavigation : FeatureNavigation {
 
                 MyMoviesScreen(
                     popBack = {
-                        navController.popBackStack()
+                        navController.navController.popBackStack()
                     },
                     imageLoader = imageLoader,
                     stateFav = favoriteViewModel.favoriteState.value,

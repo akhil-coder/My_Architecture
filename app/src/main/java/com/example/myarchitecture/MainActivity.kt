@@ -17,11 +17,11 @@ import com.example.myarchitecture.navigation.NavigationProvider
 import com.example.myarchitecture.network.ConnectivityManager
 import com.example.myarchitecture.ui.theme.Black1
 import com.example.myarchitecture.ui.theme.MyArchitectureTheme
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import com.example.navigation.rememberJetsnackNavController
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -54,10 +54,10 @@ class MainActivity : AppCompatActivity() {
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
 
             AppContent(viewModel) {
-                val navController = rememberAnimatedNavController()//rememberNavController()
+                val navController = rememberJetsnackNavController()//rememberNavController()
                 MainScreen(
                     widthSizeClass = widthSizeClass,
-                    navController = navController,
+                    jetsnackNavController = navController,
                     imageLoader = imageLoader,
                     navigationProvider = navigationProvider,
                     networkStatus = connectivityManager.isNetworkAvailable

@@ -28,4 +28,8 @@ dependencies {
 
     //Material3
     "implementation"(Compose.material3)
+
+    // Util
+    "implementation"(Compose.util)
+
 }

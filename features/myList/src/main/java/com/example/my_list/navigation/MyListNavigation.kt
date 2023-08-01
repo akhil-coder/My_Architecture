@@ -2,16 +2,16 @@ package com.example.my_list.navigation
 
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import coil.ImageLoader
 import com.example.navigation.FeatureNavigation
+import com.example.navigation.JetsnackNavController
 
 interface MyListNavigation : FeatureNavigation {
 }
 
 class MyListNavigationImpl : MyListNavigation {
     override fun registerGraph(
-        navController: NavHostController,
+        navController: JetsnackNavController,
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,

@@ -9,6 +9,7 @@ import androidx.navigation.navigation
 import coil.ImageLoader
 import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
+import com.example.navigation.JetsnackNavController
 import com.example.navigation.screens.AuthScreen
 import com.example.navigation.screens.MainScreen
 import com.example.navigation.screens.MovieScreen
@@ -25,7 +26,7 @@ import com.google.accompanist.navigation.animation.composable
 internal object InternalUiMainNavigation : FeatureNavigation {
     @OptIn(ExperimentalAnimationApi::class)
     override fun registerGraph(
-        navController: NavHostController,
+        navController: JetsnackNavController,
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
@@ -43,14 +44,14 @@ internal object InternalUiMainNavigation : FeatureNavigation {
             ) {
                 SplashScreen(
                     navigateToLoginsScreen = {
-                        navController.navigate(route = AuthScreen.Login.route) {
+                        navController.navController.navigate(route = AuthScreen.Login.route) {
                             popUpTo(route = MainScreen.Splash.route) {
                                 inclusive = true
                             }
                         }
                     },
                     navigateToMovieListsScreen = {
-                        navController.navigate(route = MovieScreen.MovieList.route) {
+                        navController.navController.navigate(route = MovieScreen.MovieList.route) {
                             popUpTo(route = MainScreen.Splash.route) {
                                 inclusive = true
                             }
@@ -69,7 +70,7 @@ internal object InternalUiMainNavigation : FeatureNavigation {
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,
                     navigateToTvShows = {
-                        navController.navigate(route = TvShowScreen.TvShowList.route) {
+                        navController.navController.navigate(route = TvShowScreen.TvShowList.route) {
                             popUpTo(route = MainScreen.HomeScreen.route) {
                                 inclusive = false
                             }
@@ -88,7 +89,7 @@ internal object InternalUiMainNavigation : FeatureNavigation {
                     appLanguage = settingsViewModel.languageState.value,
                     isLanguageDialogShone = settingsViewModel.isLanguageDialogShone,
                     popBack = {
-                        navController.popBackStack()
+                        navController.navController.popBackStack()
                     },
                     setTheme = {
                         settingsViewModel.setTheme(it)
@@ -113,7 +114,7 @@ internal object InternalUiMainNavigation : FeatureNavigation {
                     state = utilsViewModel.utilState.value,
                     event = utilsViewModel::onEventChange,
                     popBack = {
-                        navController.popBackStack()
+                        navController.navController.popBackStack()
                     }, openDrawer = { openDrawer() }
                 )
             }

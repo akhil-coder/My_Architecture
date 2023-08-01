@@ -8,7 +8,7 @@ import coil.ImageLoader
 interface FeatureNavigation {
 
     fun registerGraph(
-        navController: NavHostController,
+        navController: JetsnackNavController,
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,

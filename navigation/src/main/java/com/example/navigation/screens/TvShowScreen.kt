@@ -15,4 +15,9 @@ sealed class TvShowScreen(
         route = "tvShowDetails",
         arguments = emptyList()
         )
+
+    object MyTvShow : TvShowScreen(
+        route = "myTvShow",
+        arguments = emptyList()
+    )
 }

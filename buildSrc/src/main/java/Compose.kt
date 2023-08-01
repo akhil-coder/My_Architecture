@@ -23,4 +23,10 @@ object Compose {
     const val material3 = "androidx.compose.material3:material3:$materialNew"
 
     const val materialWindowSize = "androidx.compose.material3:material3-window-size-class:$materialNew"
+
+
+    private const val utilNew = "1.4.3"
+    const val util = "androidx.compose.ui:ui-util:$utilNew"
+
+
 }

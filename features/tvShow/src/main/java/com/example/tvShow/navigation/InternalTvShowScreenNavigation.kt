@@ -7,23 +7,23 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import coil.ImageLoader
 import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
+import com.example.navigation.JetsnackNavController
 import com.example.navigation.screens.TvShowScreen
+import com.example.tvShow.screens.myTvShow.MyTvShow
 import com.example.tvShow.screens.tvShow.TvShowListScreen
 import com.example.tvShow.screens.tvShow.TvShowListViewModel
 import com.example.tvShow.screens.tvShowDetails.TvShowDetailsScreen
-import com.example.tvShow.screens.tvShowDetails.TvShowDetailsViewModel
 import com.google.accompanist.navigation.animation.composable
 
 internal object InternalTvShowScreenNavigation : FeatureNavigation {
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun registerGraph(
-        navController: NavHostController,
+        navController: JetsnackNavController,
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
@@ -56,9 +56,9 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                     state = tvShowListViewModel.tvShowListState.value,
                     event = tvShowListViewModel::onEventChange,
                     navigateToDetailsScreen = {
-                        navController.navigate(route = "${TvShowScreen.TvShowDetails.route}")
+                        navController.navController.navigate(route = "${TvShowScreen.TvShowDetails.route}")
                     },
-                    savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
+                    savedStateHandle = navController.navController.currentBackStackEntry?.savedStateHandle,
                     openDrawer = { openDrawer() }
                 )
             }
@@ -82,7 +82,7 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                 }) { navBackStack ->
 
                 val parentEntry = remember(navBackStack) {
-                    navController.getBackStackEntry(TvShowScreen.TvShowList.route)
+                    navController.navController.getBackStackEntry(TvShowScreen.TvShowList.route)
                 }
                 val tvShowListViewModel = hiltViewModel<TvShowListViewModel>(parentEntry)
 
@@ -90,6 +90,35 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,
                     state = tvShowListViewModel.tvShowListState.value,
+                )
+            }
+
+            composable(route = TvShowScreen.MyTvShow.route,
+                arguments = TvShowScreen.MyTvShow.arguments,
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { width }, animationSpec = tween(
+                            durationMillis = 300,
+                        )
+                    ) + fadeIn(animationSpec = tween(durationMillis = 300))
+                },
+
+                popExitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { width }, animationSpec = tween(
+                            durationMillis = 300,
+                        )
+                    ) + fadeOut(animationSpec = tween(durationMillis = 300))
+                }) { navBackStack ->
+
+                val parentEntry = remember(navBackStack) {
+                    navController.navController.getBackStackEntry(TvShowScreen.MyTvShow.route)
+                }
+                val tvShowListViewModel = hiltViewModel<TvShowListViewModel>(parentEntry)
+
+                MyTvShow(
+                    imageLoader = imageLoader,
+                    networkStatus = networkStatus,
                 )
             }
         }

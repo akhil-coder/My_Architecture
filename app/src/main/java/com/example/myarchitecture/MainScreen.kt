@@ -1,10 +1,8 @@
 package com.example.myarchitecture
 
-import androidx.compose.foundation.layout.Box
+import com.example.navigation.JetsnackNavController
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
@@ -12,15 +10,10 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,20 +41,12 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.ImageLoader
-import com.example.components.dialogs.ConfirmDialog
-import com.example.components.drawer.AppBarDrawer
-import com.example.components.drawer.DrawerBody
-import com.example.components.drawer.DrawerHeader
-import com.example.components.util.MenuItem
 import com.example.myarchitecture.navigation.AppNavGraph
 import com.example.myarchitecture.navigation.BottomNavItem
 import com.example.myarchitecture.navigation.NavigationProvider
-import com.example.navigation.screens.AuthScreen
 import com.example.navigation.screens.MainScreen
-import com.example.navigation.screens.MyMoviesScreen
 import com.example.navigation.screens.ProfileScreen
 import com.example.navigation.screens.TvShowScreen
 import kotlinx.coroutines.launch
@@ -72,7 +57,7 @@ import com.example.components.AppNavRail
 
 @Composable
 fun MainScreen(
-    navController: NavHostController,
+    jetsnackNavController: JetsnackNavController,
     imageLoader: ImageLoader,
     navigationProvider: NavigationProvider,
     networkStatus: MutableState<Boolean>,
@@ -80,7 +65,7 @@ fun MainScreen(
 ) {
     val context = LocalContext.current
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val navBackStackEntry by jetsnackNavController.navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: MainScreen.HomeScreen.route
 
     val coroutineScope = rememberCoroutineScope()
@@ -109,7 +94,7 @@ fun MainScreen(
         drawerContent = {
             AppDrawer(
                 currentRoute = currentRoute,
-                navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
+                navigateToHome = { jetsnackNavController.navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
                 closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
             )
         },
@@ -121,12 +106,12 @@ fun MainScreen(
             if (isExpandedScreen) {  // For Tab Screens only
                 AppNavRail(
                     currentRoute = currentRoute,
-                    navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
+                    navigateToHome = { jetsnackNavController.navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
                 )
             }
             AppNavGraph(
                 widthSizeClass = widthSizeClass,
-                navController = navController,
+                navController = jetsnackNavController,
                 imageLoader = imageLoader,
                 navigationProvider = navigationProvider,
                 networkStatus = networkStatus,

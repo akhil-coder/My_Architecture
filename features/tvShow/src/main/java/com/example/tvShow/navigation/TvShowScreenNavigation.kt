@@ -5,13 +5,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import coil.ImageLoader
 import com.example.navigation.FeatureNavigation
+import com.example.navigation.JetsnackNavController
 
 interface TvShowScreenNavigation : FeatureNavigation {
 }
 
 class TvShowScreenNavigationImpl : TvShowScreenNavigation {
     override fun registerGraph(
-        navController: NavHostController,
+        navController: JetsnackNavController,
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,

@@ -15,6 +15,7 @@ import com.example.movie.screens.movieList.MovieListScreen
 import com.example.movie.screens.movieList.MovieListViewModel
 import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
+import com.example.navigation.JetsnackNavController
 import com.example.navigation.screens.MovieScreen
 import com.google.accompanist.navigation.animation.composable
 
@@ -22,7 +23,7 @@ internal object InternalMovieNavigation : FeatureNavigation {
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun registerGraph(
-        navController: NavHostController,
+        navController: JetsnackNavController,
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
@@ -64,9 +65,9 @@ internal object InternalMovieNavigation : FeatureNavigation {
                     state = movieListViewModel.movieListState.value,
                     event = movieListViewModel::onEventChange,
                     navigateToDetailsScreen = { id ->
-                        navController.navigate(route = "${MovieScreen.MovieDetail.route}/$id")
+                        navController.navController.navigate(route = "${MovieScreen.MovieDetail.route}/$id")
                     },
-                    savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
+                    savedStateHandle = navController.navController.currentBackStackEntry?.savedStateHandle,
                     openDrawer = { openDrawer() }
                 )
             }
@@ -101,18 +102,17 @@ internal object InternalMovieNavigation : FeatureNavigation {
                     event = movieDetailsViewModel::onEventChange,
                     backWithResult = { data ->
                         if (data != null) {
-                            navController.previousBackStackEntry?.savedStateHandle?.let {
+                            navController.navController.previousBackStackEntry?.savedStateHandle?.let {
                                 for ((key, value) in data) {
                                     it.set(key, value)
                                 }
                             }
                         }
-                        navController.popBackStack()
+                        navController.navController.popBackStack()
                     },
                     openDrawer = { openDrawer() }
                 )
             }
-
         }
     }
 }

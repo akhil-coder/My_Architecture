@@ -8,6 +8,7 @@ import androidx.navigation.navigation
 import coil.ImageLoader
 import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
+import com.example.navigation.JetsnackNavController
 import com.example.navigation.screens.ProfileScreen
 import com.example.profile.screens.editProfile.ProfileEditScreen
 import com.example.profile.screens.viewProfile.ProfileScreen
@@ -18,7 +19,7 @@ internal object InternalProfileNavigation : FeatureNavigation {
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun registerGraph(
-        navController: NavHostController,
+        navController: JetsnackNavController,
         navGraphBuilder: NavGraphBuilder,
         imageLoader: ImageLoader,
         width: Int,
@@ -38,7 +39,7 @@ internal object InternalProfileNavigation : FeatureNavigation {
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,
                     navigateToProfileEditsScreen = {
-                        navController.navigate(route = ProfileScreen.ProfileEdit.route)
+                        navController.navController.navigate(route = ProfileScreen.ProfileEdit.route)
                     },
                     openDrawer = { openDrawer() }
                 )
