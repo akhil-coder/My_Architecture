@@ -1,5 +1,6 @@
 package com.example.myarchitecture
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -22,6 +23,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -52,6 +54,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
+
+            if (widthSizeClass == WindowWidthSizeClass.Compact) {
+                this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            } else
+                this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_USER
+
 
             AppContent(viewModel) {
                 val navController = rememberAnimatedNavController()//rememberNavController()

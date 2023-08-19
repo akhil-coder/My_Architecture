@@ -28,9 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
@@ -42,14 +44,12 @@ import com.example.domain.model.tvList.TvShow
 
 @Composable
 fun TvShowListScreen(
-    imageLoader: ImageLoader,
     networkStatus: MutableState<Boolean>,
     state: TvShowListState,
     event: (TvShowListEvents) -> Unit,
     navigateToDetailsScreen: () -> Unit,
-    savedStateHandle: SavedStateHandle?,
     viewModel: TvShowListViewModel,
-    openDrawer: () -> Unit
+    openDrawer: () -> Unit,
 ) {
     DefaultScreenUI(networkStatus = networkStatus.value,
         queue = state.errorQueue,
@@ -62,28 +62,23 @@ fun TvShowListScreen(
             TvShowList(
                 viewModel = viewModel,
                 state = state,
-                imageLoader = imageLoader,
                 navigateToDetailsScreen = navigateToDetailsScreen,
                 event = event,
-                savedStateHandle = savedStateHandle
             )
         })
-    viewModel.printData()
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TvShowList(
     state: TvShowListState,
-    imageLoader: ImageLoader,
     navigateToDetailsScreen: (() -> Unit),
     event: (TvShowListEvents) -> Unit,
     viewModel: TvShowListViewModel,
-    savedStateHandle: SavedStateHandle?
 ) {
     val context = LocalContext.current
 
-    val discoverTvShow = viewModel.discoverTvShowStream?.collectAsLazyPagingItems()
+    val lazyPagingItems = state.tvShows?.collectAsLazyPagingItems()
 
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(150.dp),
@@ -93,18 +88,18 @@ fun TvShowList(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalItemSpacing = 12.dp
     ) {
-        if (discoverTvShow != null) {
+        if (lazyPagingItems != null) {
             items(
-                count = discoverTvShow.itemCount,
-                key = discoverTvShow.itemKey(),
-                contentType = discoverTvShow.itemContentType()
+                count = lazyPagingItems.itemCount,
+                key = lazyPagingItems.itemKey(),
+                contentType = lazyPagingItems.itemContentType()
             ) { index ->
-                val item = discoverTvShow[index]
-                tvShowListItem(item!!, navigateToDetailsScreen, savedStateHandle, viewModel)
+                val item = lazyPagingItems[index]
+                TvShowListItem(item!!, navigateToDetailsScreen, viewModel::setSelectedTvShow)
             }
         }
 
-        discoverTvShow?.apply {
+        lazyPagingItems?.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
 
@@ -178,12 +173,17 @@ fun TvShowList(
     }
 }
 
+@Preview
 @Composable
-fun tvShowListItem(
-    item: TvShow,
-    navigateToDetailsScreen: () -> Unit,
-    savedStateHandle: SavedStateHandle?,
-    viewModel: TvShowListViewModel
+fun TvShowScreenPreview() {
+    TvShowListItem(item = TvShow(
+        2120, "The Walking Dead", "English", "This is awesome", "dfadljkl//df..com", 2203.00
+    ), navigateToDetailsScreen = {}, setSelectedTvShow = {})
+}
+
+@Composable
+fun TvShowListItem(
+    item: TvShow, navigateToDetailsScreen: () -> Unit, setSelectedTvShow: (TvShow) -> Unit
 ) {
     // TODO: Random Generated Gradient Colors
     val gradientColorList = listOf(
@@ -199,7 +199,7 @@ fun tvShowListItem(
             .padding(2.dp)
             .clickable {
                 if (navigateToDetailsScreen != null) {
-                    viewModel.setSelectedTvShow(item = item)
+                    setSelectedTvShow(item)
                     navigateToDetailsScreen()
                 }
                 Toast

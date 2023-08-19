@@ -1,10 +1,7 @@
 package com.example.myarchitecture
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
@@ -12,18 +9,15 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -51,24 +45,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.ImageLoader
-import com.example.components.dialogs.ConfirmDialog
-import com.example.components.drawer.AppBarDrawer
-import com.example.components.drawer.DrawerBody
-import com.example.components.drawer.DrawerHeader
-import com.example.components.util.MenuItem
+import com.example.components.AppDrawer
+import com.example.components.AppNavRail
 import com.example.myarchitecture.navigation.AppNavGraph
 import com.example.myarchitecture.navigation.BottomNavItem
 import com.example.myarchitecture.navigation.NavigationProvider
-import com.example.navigation.screens.AuthScreen
 import com.example.navigation.screens.MainScreen
-import com.example.navigation.screens.MyMoviesScreen
 import com.example.navigation.screens.ProfileScreen
 import com.example.navigation.screens.TvShowScreen
 import kotlinx.coroutines.launch
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.rememberDrawerState
-import com.example.components.AppDrawer
-import com.example.components.AppNavRail
 
 @Composable
 fun MainScreen(
@@ -105,36 +90,25 @@ fun MainScreen(
         )
     )
 
-    ModalNavigationDrawer(
-        drawerContent = {
-            AppDrawer(
+    Row {
+        if (isExpandedScreen) {  // For Tab Screens only
+            AppNavRail(
                 currentRoute = currentRoute,
                 navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
-                closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
-            )
-        },
-        drawerState = sizeAwareDrawerState,
-        // Only enable opening the drawer via gestures if the screen is not expanded
-        gesturesEnabled = !isExpandedScreen
-    ) {
-        Row {
-            if (isExpandedScreen) {  // For Tab Screens only
-                AppNavRail(
-                    currentRoute = currentRoute,
-                    navigateToHome = { navController.navigate(route = "${TvShowScreen.TvShowList.route}") },
-                )
-            }
-            AppNavGraph(
-                widthSizeClass = widthSizeClass,
-                navController = navController,
-                imageLoader = imageLoader,
-                navigationProvider = navigationProvider,
-                networkStatus = networkStatus,
-                openDrawer = { coroutineScope.launch {
-                    sizeAwareDrawerState.open()
-                } },
             )
         }
+        AppNavGraph(
+            widthSizeClass = widthSizeClass,
+            navController = navController,
+            imageLoader = imageLoader,
+            navigationProvider = navigationProvider,
+            networkStatus = networkStatus,
+            openDrawer = {
+                coroutineScope.launch {
+                    sizeAwareDrawerState.open()
+                }
+            },
+        )
     }
 }
 
@@ -223,7 +197,6 @@ class NavShape(
 /**
  * Determine the drawer state to pass to the modal drawer.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun rememberSizeAwareDrawerState(isExpandedScreen: Boolean): DrawerState {
     val drawerState = rememberDrawerState(DrawerValue.Closed)

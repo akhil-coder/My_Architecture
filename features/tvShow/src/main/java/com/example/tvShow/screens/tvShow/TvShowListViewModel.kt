@@ -7,8 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.example.core.domain.ProgressBarState
 import com.example.core.domain.UIComponent
 import com.example.core.util.Logger
 import com.example.core.util.exhaustive
@@ -17,6 +15,7 @@ import com.example.interactors.tvShow.TvShowInteractor
 import com.example.navigation.network.ConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -37,7 +36,7 @@ class TvShowListViewModel @Inject constructor(
 
     init {
         connectivityObserver.observe().onEach {
-            if (it == ConnectivityObserver.Status.Available && _tvShowListState.value.tvShows.isEmpty()) {
+            if (it == ConnectivityObserver.Status.Available) {
                 onEventChange(TvShowListEvents.DiscoverTvShows)
             }
         }.launchIn(viewModelScope)
@@ -49,8 +48,7 @@ class TvShowListViewModel @Inject constructor(
     fun onEventChange(events: TvShowListEvents) {
         when (events) {
             TvShowListEvents.DiscoverTvShows -> {
-                discoverTvShowStream = tvShowInteractor.discoverTvShow.getDiscoverMovieStream()
-                    .cachedIn(viewModelScope)
+                _tvShowListState.value = tvShowListState.value.copy(tvShows = tvShowInteractor.discoverTvShow.getDiscoverMovieStream())
             }
 
             TvShowListEvents.OnRemoveHeadFromQueue -> {

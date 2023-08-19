@@ -16,7 +16,6 @@ import com.example.navigation.screens.TvShowScreen
 import com.example.tvShow.screens.tvShow.TvShowListScreen
 import com.example.tvShow.screens.tvShow.TvShowListViewModel
 import com.example.tvShow.screens.tvShowDetails.TvShowDetailsScreen
-import com.example.tvShow.screens.tvShowDetails.TvShowDetailsViewModel
 import com.google.accompanist.navigation.animation.composable
 
 internal object InternalTvShowScreenNavigation : FeatureNavigation {
@@ -51,15 +50,13 @@ internal object InternalTvShowScreenNavigation : FeatureNavigation {
                 Log.e("Network::", "composable : $networkStatus ")
                 TvShowListScreen(
                     viewModel = tvShowListViewModel,
-                    imageLoader = imageLoader,
                     networkStatus = networkStatus,
                     state = tvShowListViewModel.tvShowListState.value,
                     event = tvShowListViewModel::onEventChange,
                     navigateToDetailsScreen = {
                         navController.navigate(route = "${TvShowScreen.TvShowDetails.route}")
                     },
-                    savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
-                    openDrawer = { openDrawer() }
+                    openDrawer = { openDrawer() },
                 )
             }
 
