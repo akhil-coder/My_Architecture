@@ -9,7 +9,8 @@ object AndroidX {
     const val lifecycleVmKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVmKtxVersion"
 
     private const val lifecycleRuntimeKtxVersion = "2.6.1"
-    const val lifecycleRunKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleRuntimeKtxVersion"
+    const val lifecycleRunKtx =
+        "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleRuntimeKtxVersion"
 
     private const val datastoreVersion = "1.0.0"
     const val datastore = "androidx.datastore:datastore-preferences:$datastoreVersion"
@@ -41,4 +42,10 @@ object DebugImplementation {
 
     const val uiTooling = "androidx.compose.ui:ui-tooling:${Compose.composeVersion}"
     const val testManifest = "androidx.compose.ui:ui-test-manifest:${Compose.composeVersion}"
+}
+
+object LeakCanaryImplementation {
+
+    private const val leakCanaryVersion = "2.12"
+    const val leakCanary = "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 }

@@ -1,7 +1,7 @@
 object Android {
     const val appId = "com.example.myarchitecture"
-    const val compileSdk = 33
-    const val buildTools = "30.0.3"
+    const val compileSdk = 34
+    const val buildTools = "33.0.1"
     const val minSdk = 24
     const val targetSdk = 33
     const val versionCode = 1

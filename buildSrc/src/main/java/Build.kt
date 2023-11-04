@@ -1,5 +1,5 @@
 object Build {
-    private const val androidBuildToolsVersion = "7.4.0"
+    private const val androidBuildToolsVersion = "8.1.2"
 
     const val kotlinVersion = "1.8.10"
 
