@@ -44,8 +44,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
@@ -78,34 +76,49 @@ fun HeadingTestComponent(value: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTextFieldComponent(labelValue: String, painterResource: Painter) {
+fun MyTextFieldComponent(
+    labelValue: String,
+    painterResource: Painter,
+    onValueChange: (String) -> Unit,
+    isError: Boolean?,
+    errorMessage: String
+) {
     val textValue = remember {
         mutableStateOf("")
     }
 
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(componentShapes.extraSmall),
-        label = { Text(text = labelValue) },
+    OutlinedTextField(modifier = Modifier
+        .fillMaxWidth()
+        .clip(componentShapes.extraSmall),
+        label = {
+            if (isError == true) Text(text = errorMessage) else Text(text = labelValue)
+        },
         value = textValue.value,
+        isError = isError!!,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         singleLine = true,
         maxLines = 1,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Blue, focusedLabelColor = Color.Red, cursorColor = Color.Cyan
         ),
-        onValueChange = { textValue.value = it },
+        onValueChange = {
+            textValue.value = it
+            onValueChange(it)
+        },
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = "")
-        },
-
-        )
+        })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
+fun PasswordTextFieldComponent(
+    labelValue: String,
+    painterResource: Painter,
+    onValueChange: (String) -> Unit,
+    isError: Boolean?,
+    errorMessage: String
+) {
     val password = remember {
         mutableStateOf("")
     }
@@ -116,12 +129,15 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
 
     val localFocusManager = LocalFocusManager.current
 
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(componentShapes.extraSmall),
-        label = { Text(text = labelValue) },
+    OutlinedTextField(modifier = Modifier
+        .fillMaxWidth()
+        .clip(componentShapes.extraSmall),
+
+        label = {
+            if (isError == true) Text(text = errorMessage) else Text(text = labelValue)
+        },
         value = password.value,
+        isError = isError!!,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
         ),
@@ -133,7 +149,10 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Blue, focusedLabelColor = Color.Red, cursorColor = Color.Cyan
         ),
-        onValueChange = { password.value = it },
+        onValueChange = {
+            password.value = it
+            onValueChange(it)
+        },
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = "")
         },
@@ -154,7 +173,6 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
                 Icon(imageVector = iconImage, contentDescription = description)
             }
         },
-        visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
     )
 }
 
@@ -217,9 +235,9 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit) {
 }
 
 @Composable
-fun ButtonComponent(value: String) {
+fun ButtonComponent(value: String, onClick: (() -> Unit)?) {
     Button(
-        onClick = {},
+        onClick = { onClick },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),

@@ -2,12 +2,14 @@ package com.example.auth.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.MutableState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import coil.ImageLoader
 import com.example.auth.screens.login.LoginScreen
-import com.example.auth.screens.signup.SignupScreen
+import com.example.auth.screens.signIn.SignUpScreen
+import com.example.auth.screens.signIn.SignUpViewModel
 import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
 import com.example.navigation.screens.AuthScreen
@@ -27,7 +29,7 @@ internal object InternalAuthNavigation : FeatureNavigation {
         openDrawer: () -> Unit
     ) {
         navGraphBuilder.navigation(
-            startDestination = AuthScreen.Login.route, route = GraphRoute.authRoute
+            startDestination = AuthScreen.Signup.route, route = GraphRoute.authRoute
         ) {
 
             composable(
@@ -51,13 +53,18 @@ internal object InternalAuthNavigation : FeatureNavigation {
             composable(
                 route = AuthScreen.Signup.route
             ) {
-                SignupScreen(navigateToMovieListsScreen = {
+                val signUpViewModel = hiltViewModel<SignUpViewModel>()
+
+                SignUpScreen(
+                    state = signUpViewModel.screenState.value,
+                    events = signUpViewModel::onTriggerEvent,
+                ) {
                     navController.navigate(route = MovieScreen.MovieList.route) {
                         popUpTo(route = AuthScreen.Login.route) {
                             inclusive = true
                         }
                     }
-                })
+                }
             }
         }
     }

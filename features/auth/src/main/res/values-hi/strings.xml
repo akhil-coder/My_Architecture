@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="signIn">SignIn</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="invalid_password">Invalid Password</string>
+</resources>

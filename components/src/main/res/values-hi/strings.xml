@@ -2,6 +2,20 @@
 <resources>
     <string name="cancel">Cancel</string>
     <string name="ok">Ok</string>
+    <string name="hide_password">Hide Password</string>
     <string name="show_password">Show Password</string>
     <string name="or">or</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="signUp">SignUp</string>
+    <string name="timeline">timeline</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="toggle_visibility">Toggle Visibility</string>
+    <string name="duplicateAccountError">An account with this email already exists</string>
+    <string name="createAccountError">Could not create an account</string>
+    <string name="offlineError">You seem to be offline</string>
+    <string name="signIn">SignIn</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="invalid_email_format">Invalid Email Format</string>
 </resources>
