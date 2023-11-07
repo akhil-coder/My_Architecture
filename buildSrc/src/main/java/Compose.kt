@@ -5,6 +5,8 @@ object Compose {
     const val composeVersion = "1.4.0"
     const val ui = "androidx.compose.ui:ui:$composeVersion"
     const val material = "androidx.compose.material:material:$composeVersion"
+
+
     const val tooling = "androidx.compose.ui:ui-tooling-preview:$composeVersion"
     const val liveDataRuntime = "androidx.compose.runtime:runtime-livedata:$composeVersion"
 
@@ -19,7 +21,7 @@ object Compose {
 
     const val constraints = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 
-    private const val materialNew = "1.1.1"
+    private const val materialNew = "1.1.2"
     const val material3 = "androidx.compose.material3:material3:$materialNew"
 
     const val materialWindowSize = "androidx.compose.material3:material3-window-size-class:$materialNew"

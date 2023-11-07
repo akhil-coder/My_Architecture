@@ -12,10 +12,16 @@ sealed class AuthScreen(
         arguments = emptyList()
     )
 
-    object Signup: AuthScreen(
-        route = "signup",
+    object SignIn: AuthScreen(
+        route = "signIn",
         arguments = emptyList()
     )
+
+    object SignUp: AuthScreen(
+        route = "signUp",
+        arguments = emptyList()
+    )
+
 
 }
 

@@ -62,5 +62,6 @@ dependencies {
 
     //"implementation"(project(Modules.core))
     "implementation"(AndroidX.datastore)
+    "implementation"(project(Modules.domain))
 
 }

@@ -1,4 +1,3 @@
-
 apply(from = "$rootDir/android-library-build-new.kts")
 
 plugins {
@@ -28,7 +27,11 @@ android {
     buildTypes {
         named("release") {
             isMinifyEnabled = false
-            setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"))
+            setProguardFiles(
+                listOf(
+                    getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+                )
+            )
         }
     }
 
@@ -62,6 +65,7 @@ dependencies {
     "implementation"(project(Modules.components))
     "implementation"(project(Modules.interactors))
     "implementation"(project(Modules.domain))
+    implementation(project(mapOf("path" to ":preferences")))
 
     //navigation-animation
     "implementation"(Accompanist.animation)
@@ -69,6 +73,10 @@ dependencies {
     //Coil
     "implementation"(Coil.coil)
 
-    //icon
-    "implementation" (Compose.icons)
+    //Icon
+    "implementation"(Compose.icons)
+
+    // Material3
+    implementation(Compose.material3)
+
 }

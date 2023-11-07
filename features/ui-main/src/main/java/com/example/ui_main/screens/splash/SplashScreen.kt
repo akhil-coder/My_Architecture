@@ -14,7 +14,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    navigateToLoginsScreen: () -> Unit,
+    navigateToSignInScreen: () -> Unit,
     navigateToMovieListsScreen: () -> Unit
 ) {
 
@@ -27,7 +27,7 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = false) {
         delay(900)
-        navigateToLoginsScreen()
+        navigateToSignInScreen()
         //navigateToMovieListsScreen()
     }
 }

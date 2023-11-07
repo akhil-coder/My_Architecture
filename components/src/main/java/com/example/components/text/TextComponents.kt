@@ -44,14 +44,16 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.components.R
+import com.example.components.color.Pink400
+import com.example.components.color.Pink700
+import com.example.components.color.Purple300
+import com.example.components.color.PurpleA200
 import com.example.components.componentShapes
 
 @Composable
@@ -78,37 +80,55 @@ fun HeadingTestComponent(value: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTextFieldComponent(labelValue: String, painterResource: Painter) {
+fun MyTextFieldComponent(
+    labelValue: String,
+    painterResource: Painter,
+    onValueChange: (String) -> Unit,
+    isError: Boolean?,
+    errorMessage: String
+) {
     val textValue = remember {
         mutableStateOf("")
     }
 
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(componentShapes.extraSmall),
-        label = { Text(text = labelValue) },
+    OutlinedTextField(modifier = Modifier
+        .fillMaxWidth()
+        .clip(componentShapes.extraSmall),
+        label = {
+            if (isError == true) Text(text = errorMessage) else Text(text = labelValue)
+        },
         value = textValue.value,
+        isError = isError!!,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         singleLine = true,
         maxLines = 1,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Blue, focusedLabelColor = Color.Red, cursorColor = Color.Cyan
         ),
-        onValueChange = { textValue.value = it },
+        onValueChange = {
+            textValue.value = it
+            onValueChange(it)
+        },
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = "")
-        },
-
-        )
+        })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
+fun PasswordTextFieldComponent(
+    labelValue: String,
+    painterResource: Painter,
+    onValueChange: (String) -> Unit,
+    isError: Boolean?,
+    errorMessage: String,
+    value: String?
+) {
     val password = remember {
         mutableStateOf("")
     }
+
+    password.value = value!!
 
     val passwordVisible = remember {
         mutableStateOf(false)
@@ -120,8 +140,12 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(componentShapes.extraSmall),
-        label = { Text(text = labelValue) },
+
+        label = {
+            if (isError == true) Text(text = errorMessage) else Text(text = labelValue)
+        },
         value = password.value,
+        isError = isError!!,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
         ),
@@ -133,7 +157,10 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Blue, focusedLabelColor = Color.Red, cursorColor = Color.Cyan
         ),
-        onValueChange = { password.value = it },
+        onValueChange = {
+            password.value = it
+            onValueChange(it)
+        },
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = "")
         },
@@ -154,7 +181,6 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
                 Icon(imageVector = iconImage, contentDescription = description)
             }
         },
-        visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
     )
 }
 
@@ -217,22 +243,26 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit) {
 }
 
 @Composable
-fun ButtonComponent(value: String) {
+fun ButtonComponent(value: String, onClick: (() -> Unit)?, isEnabled: Boolean) {
     Button(
-        onClick = {},
+        onClick = { onClick },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        enabled = isEnabled
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(48.dp)
                 .background(
-                    brush = Brush.horizontalGradient(listOf(Color.Blue, Color.Black)),
-                    shape = RoundedCornerShape(50.dp)
+                    brush = if (isEnabled) Brush.horizontalGradient(
+                        listOf(Purple300, PurpleA200)
+                    ) else Brush.horizontalGradient(
+                        listOf(Pink400, Pink700)
+                    ), shape = RoundedCornerShape(50.dp)
                 ), contentAlignment = Alignment.Center
         ) {
             Text(
@@ -267,7 +297,9 @@ fun DividerTextComponent() {
 }
 
 @Composable
-fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit) {
+fun ClickableLoginTextComponent(
+    tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit, onClick: (() -> Unit)?
+) {
     val initialText =
         if (tryingToLogin) "Already have an account? " else "Don't have an account yet? "
     val loginText = if (tryingToLogin) "Login" else "Register"
@@ -294,6 +326,7 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
 
             if (span.item == loginText) {
                 onTextSelected(span.item)
+                onClick?.let { it() }
             }
         }
     })
