@@ -7,13 +7,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import coil.ImageLoader
-import com.example.auth.screens.login.LoginScreen
-import com.example.auth.screens.signIn.SignUpScreen
-import com.example.auth.screens.signIn.SignUpViewModel
+import com.example.auth.screens.signIn.SignInScreen
+import com.example.auth.screens.signIn.SignInViewModel
+import com.example.auth.screens.signUp.SignUpScreen
+import com.example.auth.screens.signUp.SignUpViewModel
 import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
 import com.example.navigation.screens.AuthScreen
-import com.example.navigation.screens.MainScreen
 import com.example.navigation.screens.MovieScreen
 import com.google.accompanist.navigation.animation.composable
 
@@ -29,35 +29,41 @@ internal object InternalAuthNavigation : FeatureNavigation {
         openDrawer: () -> Unit
     ) {
         navGraphBuilder.navigation(
-            startDestination = AuthScreen.Signup.route, route = GraphRoute.authRoute
+            startDestination = AuthScreen.SignIn.route, route = GraphRoute.authRoute
         ) {
 
             composable(
-                route = AuthScreen.Login.route
+                route = AuthScreen.SignIn.route
             ) {
-                LoginScreen(navigateToSignupScreen = {
-                    navController.navigate(route = AuthScreen.Signup.route) {
-                        popUpTo(route = MainScreen.Splash.route) {
-                            inclusive = true
+                val viewModel = hiltViewModel<SignInViewModel>()
+
+                SignInScreen(
+                    state = viewModel.screenState.value,
+                    events = viewModel::onTriggerEvent,
+                    navigateToMovieListsScreen = {
+                        navController.navigate(route = MovieScreen.MovieList.route) {
+                            popUpTo(route = AuthScreen.SignIn.route) {
+                                inclusive = true
+                            }
                         }
                     }
-                }, navigateToMovieListsScreen = {
-                    navController.navigate(route = MainScreen.HomeScreen.route) {
-                        popUpTo(route = MainScreen.HomeScreen.route) {
-                            inclusive = true
+                ) {
+                    navController.navigate(route = AuthScreen.SignUp.route) {
+                        popUpTo(route = AuthScreen.SignIn.route) {
+                            inclusive = false
                         }
                     }
-                })
+                }
             }
 
             composable(
-                route = AuthScreen.Signup.route
+                route = AuthScreen.SignUp.route
             ) {
-                val signUpViewModel = hiltViewModel<SignUpViewModel>()
+                val viewModel = hiltViewModel<SignUpViewModel>()
 
                 SignUpScreen(
-                    state = signUpViewModel.screenState.value,
-                    events = signUpViewModel::onTriggerEvent,
+                    state = viewModel.screenState.value,
+                    events = viewModel::onTriggerEvent,
                 ) {
                     navController.navigate(route = MovieScreen.MovieList.route) {
                         popUpTo(route = AuthScreen.Login.route) {

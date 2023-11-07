@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.domain.model.user.SignInScreenState
 import com.example.domain.model.user.SignUpScreenState
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -41,10 +42,10 @@ class BasePreferencesManagerImpl constructor(
         SignUpScreenState(email = userName, password = password)
     }
 
-    override suspend fun setUser(signUpState: SignUpScreenState) {
+    override suspend fun setUser(signInState: SignInScreenState) {
         context.dataStore.edit { preferences ->
-            preferences[USER_DETAILS_USERNAME] = signUpState.email!!
-            preferences[USER_DETAILS_PASSWORD] = signUpState.password!!
+            preferences[USER_DETAILS_USERNAME] = signInState.email!!
+            preferences[USER_DETAILS_PASSWORD] = signInState.password!!
         }
     }
 

@@ -22,13 +22,14 @@ import com.example.components.text.MyTextFieldComponent
 import com.example.components.text.NormalTestComponent
 import com.example.components.text.PasswordTextFieldComponent
 import com.example.components.text.UnderLinedTestComponent
-import com.example.domain.model.user.SignUpScreenState
+import com.example.domain.model.user.SignInScreenState
 
 @Composable
-fun SignUpScreen(
-    state: SignUpScreenState?,
+fun SignInScreen(
+    state: SignInScreenState?,
     events: ((SignInUIEvents) -> Unit)?,
     navigateToMovieListsScreen: (() -> Unit)?,
+    navigateToSignUpScreen: (() -> Unit)?,
 ) {
     Surface(
         modifier = Modifier
@@ -54,14 +55,14 @@ fun SignUpScreen(
                     id = R.string.invalid_email_format
                 )
             )
-            Spacer(modifier = Modifier.height(40.dp))
 
             PasswordTextFieldComponent(
+                value = state?.password,
                 labelValue = stringResource(id = R.string.password),
                 painterResource = painterResource(id = R.drawable.baseline_password_24),
                 onValueChange = { newValue -> events?.invoke(SignInUIEvents.UpdatePassword(newValue)) },
                 isError = state?.isBadPassword,
-                errorMessage = stringResource(id = com.example.auth.R.string.invalid_password)
+                errorMessage = stringResource(id = R.string.invalid_password),
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -71,14 +72,20 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(260.dp))
 
             ButtonComponent(
-                value = stringResource(id = R.string.signIn), navigateToMovieListsScreen
+                value = stringResource(id = R.string.signIn),
+                navigateToMovieListsScreen,
+                isEnabled = state!!.isBadData   // TODO: Handle Validation on Click
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             DividerTextComponent()
 
-            ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {})
+            ClickableLoginTextComponent(
+                tryingToLogin = false,
+                onTextSelected = {},
+                onClick = navigateToSignUpScreen
+            )
 
         }
     }
@@ -87,9 +94,13 @@ fun SignUpScreen(
 @androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun LoginScreenPreview() {
-    SignUpScreen(
-        state = SignUpScreenState("Akhil@gmail.com", "123456567"),
-        events = null,
-        navigateToMovieListsScreen = null,
+    SignInScreen(
+        state = SignInScreenState(
+            email = "Akhil@gmail.com",
+            password = "123456567",
+            isBadEmail = false,
+            isBadPassword = false
+        ), events = null, navigateToMovieListsScreen = null, navigateToSignUpScreen = null
     )
 }
+

@@ -50,6 +50,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.components.R
+import com.example.components.color.Pink400
+import com.example.components.color.Pink700
+import com.example.components.color.Purple300
+import com.example.components.color.PurpleA200
 import com.example.components.componentShapes
 
 @Composable
@@ -117,11 +121,14 @@ fun PasswordTextFieldComponent(
     painterResource: Painter,
     onValueChange: (String) -> Unit,
     isError: Boolean?,
-    errorMessage: String
+    errorMessage: String,
+    value: String?
 ) {
     val password = remember {
         mutableStateOf("")
     }
+
+    password.value = value!!
 
     val passwordVisible = remember {
         mutableStateOf(false)
@@ -129,9 +136,10 @@ fun PasswordTextFieldComponent(
 
     val localFocusManager = LocalFocusManager.current
 
-    OutlinedTextField(modifier = Modifier
-        .fillMaxWidth()
-        .clip(componentShapes.extraSmall),
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.extraSmall),
 
         label = {
             if (isError == true) Text(text = errorMessage) else Text(text = labelValue)
@@ -235,22 +243,26 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit) {
 }
 
 @Composable
-fun ButtonComponent(value: String, onClick: (() -> Unit)?) {
+fun ButtonComponent(value: String, onClick: (() -> Unit)?, isEnabled: Boolean) {
     Button(
         onClick = { onClick },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        enabled = isEnabled
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(48.dp)
                 .background(
-                    brush = Brush.horizontalGradient(listOf(Color.Blue, Color.Black)),
-                    shape = RoundedCornerShape(50.dp)
+                    brush = if (isEnabled) Brush.horizontalGradient(
+                        listOf(Purple300, PurpleA200)
+                    ) else Brush.horizontalGradient(
+                        listOf(Pink400, Pink700)
+                    ), shape = RoundedCornerShape(50.dp)
                 ), contentAlignment = Alignment.Center
         ) {
             Text(
@@ -285,7 +297,9 @@ fun DividerTextComponent() {
 }
 
 @Composable
-fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit) {
+fun ClickableLoginTextComponent(
+    tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit, onClick: (() -> Unit)?
+) {
     val initialText =
         if (tryingToLogin) "Already have an account? " else "Don't have an account yet? "
     val loginText = if (tryingToLogin) "Login" else "Register"
@@ -312,6 +326,7 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
 
             if (span.item == loginText) {
                 onTextSelected(span.item)
+                onClick?.let { it() }
             }
         }
     })

@@ -42,8 +42,8 @@ internal object InternalUiMainNavigation : FeatureNavigation {
                 route = MainScreen.Splash.route
             ) {
                 SplashScreen(
-                    navigateToLoginsScreen = {
-                        navController.navigate(route = AuthScreen.Login.route) {
+                    navigateToSignInScreen = {
+                        navController.navigate(route = AuthScreen.SignIn.route) {
                             popUpTo(route = MainScreen.Splash.route) {
                                 inclusive = true
                             }
