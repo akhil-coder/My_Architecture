@@ -71,4 +71,8 @@ dependencies {
 
     //icon
     "implementation" (Compose.icons)
+
+    //Material3
+    "implementation"(Compose.material3)
+
 }

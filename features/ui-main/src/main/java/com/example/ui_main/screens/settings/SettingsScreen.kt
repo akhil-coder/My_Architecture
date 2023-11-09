@@ -10,9 +10,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -27,6 +37,7 @@ import com.example.components.buttons.CustomButton
 import com.example.core.util.getKey
 import com.example.ui_main.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SettingsScreen(
@@ -58,7 +69,9 @@ fun SettingsScreen(
             )
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(it)) {
 
             Column(
                 modifier = Modifier
@@ -80,21 +93,17 @@ fun SettingsScreen(
 
                     Spacer(modifier = Modifier.width(12.dp))
 
-                    Switch(
-                        checked = isDarkTheme,
-                        onCheckedChange = {
-                            setTheme(it)
-                        })
                 }
 
                 CustomButton(
-                    text = stringResource(R.string.language) ,
-                    modifier = Modifier.fillMaxWidth()) {
+                    text = stringResource(R.string.language),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     showLanguageDialog()
                 }
             }
 
-            if(isLanguageDialogShone){
+            if (isLanguageDialogShone) {
                 LanguageDialog(
                     appLanguage,
                     onConfirm = {
@@ -141,7 +150,7 @@ fun LanguageDialog(
     ) {
 
         Card(
-            elevation = 8.dp,
+            elevation = CardDefaults.elevatedCardElevation(),
             shape = RoundedCornerShape(16.dp),
             // modifier = Modifier.fillMaxWidth(0.95f)
         ) {
@@ -157,7 +166,7 @@ fun LanguageDialog(
                     text = stringResource(R.string.choose_language),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -180,12 +189,12 @@ fun LanguageDialog(
                                     selectedLanguage = languages.getKey(text)
                                 },
                                 colors = RadioButtonDefaults.colors(
-                                    selectedColor = MaterialTheme.colors.primary,
+                                    selectedColor = MaterialTheme.colorScheme.primary,
                                 )
                             )
                             Text(
                                 text = text,
-                                style = MaterialTheme.typography.body1.merge(),
+                                style = MaterialTheme.typography.bodyMedium.merge(),
                                 modifier = Modifier.padding(start = 4.dp)
                             )
                         }
@@ -197,7 +206,7 @@ fun LanguageDialog(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
-                    CustomButton(text = stringResource(R.string.cancel),) {
+                    CustomButton(text = stringResource(R.string.cancel)) {
                         onDismiss()
                     }
                     Spacer(modifier = Modifier.width(14.dp))

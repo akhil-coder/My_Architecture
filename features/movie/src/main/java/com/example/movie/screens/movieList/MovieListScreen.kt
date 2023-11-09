@@ -13,6 +13,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -37,7 +42,7 @@ import com.example.components.DefaultScreenUI
 @Composable
 fun MovieListScreen(
     imageLoader: ImageLoader,
-    networkStatus : MutableState<Boolean>,
+    networkStatus: MutableState<Boolean>,
     state: MovieListState,
     event: (MovieListEvents) -> Unit,
     savedStateHandle: SavedStateHandle?,
@@ -54,34 +59,52 @@ fun MovieListScreen(
             }
         }
     }
-    
-    ComposableLifecycle{ source, event ->
-        when(event){
-            Lifecycle.Event.ON_CREATE->{ Log.e("Lifecycle::", "MovieListScreen: onCreate")}
-            Lifecycle.Event.ON_START->{Log.e("Lifecycle::", "MovieListScreen: ON_START")}
-            Lifecycle.Event.ON_RESUME->{Log.e("Lifecycle::", "MovieListScreen: ON_RESUME")}
-            Lifecycle.Event.ON_PAUSE->{Log.e("Lifecycle::", "MovieListScreen: ON_PAUSE")}
-            Lifecycle.Event.ON_STOP->{Log.e("Lifecycle::", "MovieListScreen: ON_STOP")}
-            Lifecycle.Event.ON_DESTROY->{Log.e("Lifecycle::", "MovieListScreen: ON_DESTROY")}
-            else -> {Log.e("Lifecycle::", "MovieListScreen: Else")}
+
+    ComposableLifecycle { source, event ->
+        when (event) {
+            Lifecycle.Event.ON_CREATE -> {
+                Log.e("Lifecycle::", "MovieListScreen: onCreate")
+            }
+
+            Lifecycle.Event.ON_START -> {
+                Log.e("Lifecycle::", "MovieListScreen: ON_START")
+            }
+
+            Lifecycle.Event.ON_RESUME -> {
+                Log.e("Lifecycle::", "MovieListScreen: ON_RESUME")
+            }
+
+            Lifecycle.Event.ON_PAUSE -> {
+                Log.e("Lifecycle::", "MovieListScreen: ON_PAUSE")
+            }
+
+            Lifecycle.Event.ON_STOP -> {
+                Log.e("Lifecycle::", "MovieListScreen: ON_STOP")
+            }
+
+            Lifecycle.Event.ON_DESTROY -> {
+                Log.e("Lifecycle::", "MovieListScreen: ON_DESTROY")
+            }
+
+            else -> {
+                Log.e("Lifecycle::", "MovieListScreen: Else")
+            }
         }
     }
-    
-    DefaultScreenUI(
-        networkStatus = networkStatus.value,
+
+    DefaultScreenUI(networkStatus = networkStatus.value,
         queue = state.errorQueue,
         onRemoveHeadFromQueue = {
             event(MovieListEvents.OnRemoveHeadFromQueue)
         },
-        progressBarState = state.progressBarState, content = {
+        progressBarState = state.progressBarState,
+        content = {
 
-        MovieList(
-            state,
-            imageLoader = imageLoader,
-            navigateToDetailsScreen,
-            event
-        )
-    }, openDrawer = { openDrawer() })
+            MovieList(
+                state, imageLoader = imageLoader, navigateToDetailsScreen, event
+            )
+        },
+        openDrawer = { openDrawer() })
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -109,7 +132,7 @@ fun MovieList(
                     .clickable {
                         navigateToDetailsScreen(movieItem.id.toString())
                     },
-                elevation = 8.dp,
+                elevation = CardDefaults.elevatedCardElevation(),
                 shape = RoundedCornerShape(topEnd = 14.dp, bottomStart = 14.dp)
 
             ) {
@@ -117,20 +140,17 @@ fun MovieList(
                 Column() {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(movieItem.posterPath)
-                            .crossfade(true)
-                            .build(),
+                            .data(movieItem.posterPath).crossfade(true).build(),
                         contentDescription = "poster",
                         contentScale = ContentScale.FillBounds,
-                        modifier = Modifier
-                            .height(200.dp)
+                        modifier = Modifier.height(200.dp)
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
                         text = movieItem.title,
-                        style = MaterialTheme.typography.subtitle2,
+                        style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
@@ -140,12 +160,12 @@ fun MovieList(
                     ) {
                         Text(
                             text = movieItem.voteAverage.toString(),
-                            style = MaterialTheme.typography.subtitle2,
+                            style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                         )
                         Icon(
-                            imageVector = if(movieItem.voteAverage >= 6) Icons.Default.ThumbUp else Icons.Default.ThumbDown,
+                            imageVector = if (movieItem.voteAverage >= 6) Icons.Default.ThumbUp else Icons.Default.ThumbDown,
                             contentDescription = "Rating",
                             tint = Color.Blue,
                             modifier = Modifier.size(16.dp)
@@ -154,7 +174,7 @@ fun MovieList(
 
                     Text(
                         text = movieItem.originalLanguage,
-                        style = MaterialTheme.typography.caption,
+                        style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 12.dp)
                     )

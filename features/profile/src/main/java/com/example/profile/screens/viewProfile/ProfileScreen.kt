@@ -9,6 +9,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,13 +46,11 @@ fun ProfileScreen(
         mutableStateOf<Uri?>(null)
     }
 
-    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri -> selectedImageUri = uri }
-    )
+    val singlePhotoPickerLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia(),
+            onResult = { uri -> selectedImageUri = uri })
 
-    DefaultScreenUI(
-        networkStatus = networkStatus.value,
+    DefaultScreenUI(networkStatus = networkStatus.value,
         appBar = { CustomAppBar(menuExpanded) },
         openDrawer = { openDrawer() },
         content = {
@@ -56,19 +62,16 @@ fun ProfileScreen(
                 ) {
                     Box() {
                         CircleProfileImage(
-                            imageLoader = imageLoader,
-                            uri = selectedImageUri
+                            imageLoader = imageLoader, uri = selectedImageUri
                         )
-                        IconButton(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .size(24.dp),
+                        IconButton(modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(24.dp),
                             onClick = {
                                 singlePhotoPickerLauncher.launch(
                                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                                 )
-                            }
-                        ) {
+                            }) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit profile pic"
@@ -79,12 +82,10 @@ fun ProfileScreen(
                         modifier = Modifier.padding(start = 12.dp),
                     ) {
                         Text(
-                            text = "Name",
-                            style = MaterialTheme.typography.h6
+                            text = "Name", style = MaterialTheme.typography.labelSmall
                         )
                         Text(
-                            text = "name@email.com",
-                            style = MaterialTheme.typography.caption
+                            text = "name@email.com", style = MaterialTheme.typography.labelSmall
                         )
                     }
                 }
@@ -96,23 +97,20 @@ fun ProfileScreen(
             }
 
         })
-    if (menuExpanded.value)
-        ShowPopUpMenuDialog(menuExpanded, navigateToProfileEditsScreen)
+    if (menuExpanded.value) ShowPopUpMenuDialog(menuExpanded, navigateToProfileEditsScreen)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomAppBar(menuExpanded: MutableState<Boolean>) {
     TopAppBar(
         title = {
             Text(text = stringResource(R.string.profile), color = Color.White)
         },
-        elevation = 4.dp,
         actions = {
-            IconButton(
-                onClick = {
-                    menuExpanded.value = !menuExpanded.value
-                }
-            ) {
+            IconButton(onClick = {
+                menuExpanded.value = !menuExpanded.value
+            }) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = "more",
@@ -125,8 +123,7 @@ fun CustomAppBar(menuExpanded: MutableState<Boolean>) {
 
 @Composable
 fun ShowPopUpMenuDialog(
-    menuExpanded: MutableState<Boolean>,
-    navigateToProfileEditsScreen: () -> Unit
+    menuExpanded: MutableState<Boolean>, navigateToProfileEditsScreen: () -> Unit
 ) {
     var expanded by remember {
         mutableStateOf(true)
@@ -141,42 +138,33 @@ fun ShowPopUpMenuDialog(
             .absolutePadding(top = 45.dp, right = 20.dp)
     ) {
         DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
+            expanded = expanded, onDismissRequest = {
                 expanded = false
                 menuExpanded.value = false
-            },
-            modifier = Modifier
-                .width(140.dp)
+            }, modifier = Modifier.width(140.dp)
         ) {
 
-            items.forEachIndexed { index, itemText ->
-                DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                        menuExpanded.value = false
-                        when (itemText) {
-                            "Edit" -> navigateToProfileEditsScreen()
-                        }
+          /*  items.forEachIndexed { index, itemText ->
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    menuExpanded.value = false
+                    when (itemText) {
+                        "Edit" -> navigateToProfileEditsScreen()
                     }
-                ) {
+                }) {
 
                     Icon(
                         imageVector = when (itemText) {
                             "Edit" -> Icons.Default.Edit
                             else -> Icons.Default.Edit
-                        },
-                        contentDescription = "Icons",
-                        tint = Color.LightGray
+                        }, contentDescription = "Icons", tint = Color.LightGray
                     )
 
                     Text(
-                        text = itemText,
-                        modifier = Modifier
-                            .padding(start = 4.dp)
+                        text = itemText, modifier = Modifier.padding(start = 4.dp)
                     )
                 }
-            }
+            }*/
 
         }
 

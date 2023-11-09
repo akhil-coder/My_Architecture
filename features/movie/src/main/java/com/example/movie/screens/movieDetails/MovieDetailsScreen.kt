@@ -10,6 +10,12 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -57,6 +63,7 @@ fun MovieDetailsScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomAppBar(
     state: MovieDetailsState,
@@ -99,9 +106,7 @@ fun CustomAppBar(
                     tint = Color.White
                 )
             }
-        },
-        elevation = 4.dp
-    )
+        })
 }
 
 
@@ -147,13 +152,13 @@ fun movieDetail(
 
                     Text(
                         text = it.originalTitle,
-                        style = MaterialTheme.typography.h5,
+                        style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = it.genres.toString(),
-                        style = MaterialTheme.typography.caption,
+                        style = MaterialTheme.typography.labelMedium,
                         lineHeight = 24.sp,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
@@ -164,7 +169,7 @@ fun movieDetail(
                     ) {
                         Text(
                             text = it.voteCount.toString(),
-                            style = MaterialTheme.typography.subtitle2,
+                            style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                         )
@@ -180,7 +185,7 @@ fun movieDetail(
 
                     Text(
                         text = it.overview,
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.labelSmall,
                         lineHeight = 24.sp,
                         fontSize = 18.sp
                     )

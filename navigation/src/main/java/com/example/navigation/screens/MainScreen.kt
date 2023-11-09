@@ -11,8 +11,13 @@ sealed class MainScreen(
         arguments = emptyList()
     )
 
-    object HomeScreen : MainScreen(
+    object HomeScreen: MainScreen(
         route = "homeScreen",
+        arguments = emptyList()
+    )
+
+    object ListingScreen : MainScreen(
+        route = "listingScreen",
         arguments = emptyList()
     )
 

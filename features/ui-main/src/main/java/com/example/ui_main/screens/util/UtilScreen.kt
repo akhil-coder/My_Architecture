@@ -3,24 +3,22 @@ package com.example.ui_main.screens.util
 import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.result.launch
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import com.example.components.DefaultScreenUI
 import com.example.components.buttons.CustomButton
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun UtilScreen(
@@ -35,23 +33,23 @@ fun UtilScreen(
         Manifest.permission.RECORD_AUDIO,
     )
 
-    val multiplePermissionResultLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions(),
-            onResult = { perms ->
-                var granded = true
-                permissionsToRequest.forEach { permission ->
-                    Log.e("PERM::", "$permission: ${perms[permission] == true}")
-                    if (perms[permission] != true) granded = false
-                    event(
-                        UtilEvents.AddPermission(
-                            permission = permission, isGranted = perms[permission] == true
-                        )
+    val multiplePermissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { perms ->
+            var granded = true
+            permissionsToRequest.forEach { permission ->
+                Log.e("PERM::", "$permission: ${perms[permission] == true}")
+                if (perms[permission] != true) granded = false
+                event(
+                    UtilEvents.AddPermission(
+                        permission = permission, isGranted = perms[permission] == true
                     )
-                }
-                if (granded) {
-                    openCamera.value = true
-                }
-            })
+                )
+            }
+            if (granded) {
+                openCamera.value = true
+            }
+        })
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
@@ -73,7 +71,7 @@ fun UtilScreen(
             )
         },
         content = {
-
+/*
             Scaffold(
                 topBar = {
                     TopAppBar(title = {
@@ -91,6 +89,7 @@ fun UtilScreen(
 
                 ) {
                 SetContent(
+
                     state,
                     event,
                     permissionsToRequest,
@@ -102,7 +101,7 @@ fun UtilScreen(
                     openCamera.value = false
                 }
             }
-
+*/
         },
         openDrawer = { openDrawer() })
 }
