@@ -14,10 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -205,7 +206,9 @@ fun tvShowListItem(
                 Toast
                     .makeText(context, "Clicked", Toast.LENGTH_SHORT)
                     .show()
-            }, elevation = 8.dp, shape = RoundedCornerShape(topEnd = 14.dp, bottomStart = 14.dp)
+            },
+        elevation = CardDefaults.elevatedCardElevation(),
+        shape = RoundedCornerShape(topEnd = 14.dp, bottomStart = 14.dp)
     ) {
         Column(
             modifier = Modifier.background(
@@ -229,21 +232,21 @@ fun tvShowListItem(
                 Text(
                     text = item.name,
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = item.originalLanguage,
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = item.overview,
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
             }

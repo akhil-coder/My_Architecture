@@ -1,14 +1,12 @@
 package com.example.components.text
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -24,18 +22,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -50,10 +45,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.components.R
-import com.example.components.color.Pink400
-import com.example.components.color.Pink700
-import com.example.components.color.Purple300
-import com.example.components.color.PurpleA200
 import com.example.components.componentShapes
 
 @Composable
@@ -63,7 +54,7 @@ fun NormalTestComponent(value: String) {
             .fillMaxWidth()
             .heightIn(min = 40.dp), style = TextStyle(
             fontSize = 18.sp, fontWeight = FontWeight.Normal, fontStyle = FontStyle.Normal
-        ), color = colorResource(id = R.color.black), textAlign = TextAlign.Center
+        ), textAlign = TextAlign.Center
     )
 }
 
@@ -74,11 +65,10 @@ fun HeadingTestComponent(value: String) {
             .fillMaxWidth()
             .heightIn(min = 40.dp), style = TextStyle(
             fontSize = 30.sp, fontWeight = FontWeight.Bold, fontStyle = FontStyle.Normal
-        ), color = colorResource(id = R.color.black), textAlign = TextAlign.Center
+        ), textAlign = TextAlign.Center
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTextFieldComponent(
     labelValue: String,
@@ -102,9 +92,6 @@ fun MyTextFieldComponent(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         singleLine = true,
         maxLines = 1,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color.Blue, focusedLabelColor = Color.Red, cursorColor = Color.Cyan
-        ),
         onValueChange = {
             textValue.value = it
             onValueChange(it)
@@ -154,9 +141,6 @@ fun PasswordTextFieldComponent(
             localFocusManager.clearFocus()
         },
         maxLines = 1,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color.Blue, focusedLabelColor = Color.Red, cursorColor = Color.Cyan
-        ),
         onValueChange = {
             password.value = it
             onValueChange(it)
@@ -198,7 +182,7 @@ fun CheckBoxComponent(value: String, onTextSelected: (String) -> Unit) {
         }
 
         Checkbox(checked = checkedState.value, onCheckedChange = {
-            checkedState.value != checkedState.value
+            checkedState.value = !checkedState.value
         })
 
         ClickableTextComponent(value = value, onTextSelected = onTextSelected)
@@ -250,20 +234,13 @@ fun ButtonComponent(value: String, onClick: (() -> Unit)?, isEnabled: Boolean) {
             .fillMaxWidth()
             .heightIn(48.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        colors = ButtonDefaults.filledTonalButtonColors(),
         enabled = isEnabled
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(48.dp)
-                .background(
-                    brush = if (isEnabled) Brush.horizontalGradient(
-                        listOf(Purple300, PurpleA200)
-                    ) else Brush.horizontalGradient(
-                        listOf(Pink400, Pink700)
-                    ), shape = RoundedCornerShape(50.dp)
-                ), contentAlignment = Alignment.Center
+                .heightIn(48.dp), contentAlignment = Alignment.Center
         ) {
             Text(
                 text = value, fontSize = 18.sp, fontWeight = FontWeight.Bold
@@ -335,15 +312,10 @@ fun ClickableLoginTextComponent(
 @Composable
 fun UnderLinedTestComponent(value: String) {
     Text(
-        text = value,
-        modifier = Modifier
+        text = value, modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 40.dp),
-        style = TextStyle(
+            .heightIn(min = 40.dp), style = TextStyle(
             fontSize = 16.sp, fontWeight = FontWeight.Normal, fontStyle = FontStyle.Normal
-        ),
-        color = colorResource(id = R.color.black),
-        textAlign = TextAlign.Center,
-        textDecoration = TextDecoration.Underline
+        ), textAlign = TextAlign.Center, textDecoration = TextDecoration.Underline
     )
 }

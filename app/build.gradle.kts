@@ -72,7 +72,6 @@ dependencies {
     implementation(Compose.activity)
     implementation(Compose.ui)
     implementation(Compose.tooling)
-    implementation(Compose.material)
     implementation(project(mapOf("path" to ":features:tvShow")))
 
     testImplementation(TestImplementation.junit)

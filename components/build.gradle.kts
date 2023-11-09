@@ -68,6 +68,8 @@ dependencies {
 
     //Coil
     "implementation"(Coil.coil)
+
+    //Material3
     "implementation"(Compose.material3)
 
     //Icons

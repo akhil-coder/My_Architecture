@@ -14,17 +14,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RateReview
 import androidx.compose.material.icons.outlined.HeartBroken
 import androidx.compose.material.icons.outlined.MonitorHeart
-import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -49,12 +49,10 @@ import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.components.AppDrawer
 import com.example.domain.model.tvList.TvShow
 import com.example.navigation.screens.TvShowScreen
 import com.example.tvShow.R
 import com.example.tvShow.screens.tvShow.TvShowListState
-import kotlinx.coroutines.launch
 
 @Composable
 fun TvShowDetailsScreen(
@@ -104,7 +102,7 @@ fun TvShowDetails(
             modifier = Modifier
                 .padding(2.dp)
                 .layoutId("detailCard"),
-            elevation = 8.dp,
+            elevation = CardDefaults.elevatedCardElevation(),
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
         ) {
             Column(
@@ -120,7 +118,7 @@ fun TvShowDetails(
                 ) {
                     Text(
                         text = tvShow.name,
-                        style = MaterialTheme.typography.h3.copy(fontFamily = FontFamily.SansSerif)
+                        style = MaterialTheme.typography.headlineMedium.copy(fontFamily = FontFamily.SansSerif)
                     )
 
                     IconButton(onClick = {}) {
@@ -133,7 +131,7 @@ fun TvShowDetails(
                 }
 
                 Text(
-                    text = tvShow.originalLanguage, style = MaterialTheme.typography.h5
+                    text = tvShow.originalLanguage, style = MaterialTheme.typography.labelSmall
                 )
 
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -143,7 +141,7 @@ fun TvShowDetails(
                         tint = Color.Red
                     )
                     Text(
-                        text = tvShow.voteAverage.toString(), style = MaterialTheme.typography.h6
+                        text = tvShow.voteAverage.toString(), style = MaterialTheme.typography.labelSmall
                     )
                 }
 
@@ -154,11 +152,11 @@ fun TvShowDetails(
                 )
 
                 Text(
-                    text = stringResource(R.string.description), style = MaterialTheme.typography.h5
+                    text = stringResource(R.string.description), style = MaterialTheme.typography.headlineSmall
                 )
 
                 Text(
-                    text = tvShow.overview.toString(), style = MaterialTheme.typography.h6
+                    text = tvShow.overview.toString(), style = MaterialTheme.typography.labelSmall
                 )
             }
         }
@@ -229,7 +227,7 @@ fun CoverAndProfileImage(
                     .fillMaxWidth()
                     .height(600.dp)
                     .layoutId("detailCard"),
-                elevation = 8.dp,
+                elevation = CardDefaults.elevatedCardElevation(),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
             ) {
                 Column(
@@ -245,7 +243,7 @@ fun CoverAndProfileImage(
                     ) {
                         Text(
                             text = tvShow.name,
-                            style = MaterialTheme.typography.h3.copy(fontFamily = FontFamily.SansSerif),
+                            style = MaterialTheme.typography.titleMedium.copy(fontFamily = FontFamily.SansSerif),
                             modifier = Modifier.weight(1f)
                         )
 
@@ -259,7 +257,7 @@ fun CoverAndProfileImage(
                     }
 
                     Text(
-                        text = tvShow.originalLanguage, style = MaterialTheme.typography.h5
+                        text = tvShow.originalLanguage, style = MaterialTheme.typography.labelSmall
                     )
 
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -270,7 +268,7 @@ fun CoverAndProfileImage(
                         )
                         Text(
                             text = tvShow.voteAverage.toString(),
-                            style = MaterialTheme.typography.h6
+                            style = MaterialTheme.typography.labelSmall
                         )
                     }
 
@@ -282,11 +280,11 @@ fun CoverAndProfileImage(
 
                     Text(
                         text = stringResource(R.string.description),
-                        style = MaterialTheme.typography.h5
+                        style = MaterialTheme.typography.labelSmall
                     )
 
                     Text(
-                        text = tvShow.overview.toString(), style = MaterialTheme.typography.h6
+                        text = tvShow.overview.toString(), style = MaterialTheme.typography.labelSmall
                     )
                 }
             }

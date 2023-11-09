@@ -11,10 +11,9 @@ import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
 import com.example.navigation.screens.AuthScreen
 import com.example.navigation.screens.MainScreen
-import com.example.navigation.screens.MovieScreen
 import com.example.navigation.screens.TvShowScreen
-import com.example.ui_main.screens.homeScreen.HomeScreen
-import com.example.ui_main.screens.homeScreen.HomeScreenViewModel
+import com.example.ui_main.screens.listingScreen.ListingScreen
+import com.example.ui_main.screens.listingScreen.ListingScreenViewModel
 import com.example.ui_main.screens.settings.SettingsScreen
 import com.example.ui_main.screens.settings.SettingsViewModel
 import com.example.ui_main.screens.splash.SplashScreen
@@ -48,29 +47,22 @@ internal object InternalUiMainNavigation : FeatureNavigation {
                                 inclusive = true
                             }
                         }
-                    },
-                    navigateToMovieListsScreen = {
-                        navController.navigate(route = MovieScreen.MovieList.route) {
-                            popUpTo(route = MainScreen.Splash.route) {
-                                inclusive = true
-                            }
-                        }
                     }
                 )
             }
 
             composable(
-                route = MainScreen.HomeScreen.route
+                route = MainScreen.ListingScreen.route
             ) {
-                val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
-                HomeScreen(
-                    state = homeScreenViewModel.homeUiState.value,
-                    event = homeScreenViewModel::onEventChange,
+                val viewModel = hiltViewModel<ListingScreenViewModel>()
+                ListingScreen(
+                    state = viewModel.listingUiState.value,
+                    event = viewModel::onEventChange,
                     imageLoader = imageLoader,
                     networkStatus = networkStatus,
                     navigateToTvShows = {
                         navController.navigate(route = TvShowScreen.TvShowList.route) {
-                            popUpTo(route = MainScreen.HomeScreen.route) {
+                            popUpTo(route = MainScreen.ListingScreen.route) {
                                 inclusive = false
                             }
                         }

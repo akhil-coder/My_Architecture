@@ -1,15 +1,15 @@
 package com.example.auth.screens.signUp
 
-import androidx.compose.foundation.background
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +23,7 @@ import com.example.components.text.HeadingTestComponent
 import com.example.components.text.MyTextFieldComponent
 import com.example.components.text.NormalTestComponent
 import com.example.components.text.PasswordTextFieldComponent
+import com.example.components.theme.AppTheme
 import com.example.domain.model.user.SignUpScreenState
 
 @Composable
@@ -32,13 +33,13 @@ fun SignUpScreen(
     navigateToSignUpScreen: (() -> Unit)?,
 ) {
     Surface(
-        color = Color.White,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp)
+        color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 18.dp)
+        ) {
             NormalTestComponent(value = stringResource(R.string.hello))
 
             HeadingTestComponent(value = stringResource(R.string.create_an_account))
@@ -101,37 +102,64 @@ fun SignUpScreen(
             ButtonComponent(
                 value = stringResource(R.string.register),
                 onClick = { events?.invoke(SignUpUIEvents.SignUp) },
-                isEnabled = false
+                isEnabled = true
             )
-
 
             Spacer(modifier = Modifier.height(30.dp))
 
             DividerTextComponent()
 
-            ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {},
-                onClick = navigateToSignUpScreen)
-
+            ClickableLoginTextComponent(
+                tryingToLogin = true, onTextSelected = {}, onClick = navigateToSignUpScreen
+            )
         }
     }
 }
 
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO, name = "DefaultPreviewLight", showBackground = true
+)
 @Composable
-fun DefaultPreviewSignUpScreen() {
-    SignUpScreen(
-        state = SignUpScreenState(
-            "Akhil",
-            "S",
-            "akhil@gmail.com",
-            "1234As%343",
-            "1234As",
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ), events = null,  navigateToSignUpScreen = null
-    )
+fun DefaultPreviewSignUpScreenLight() {
+    AppTheme(useDarkTheme = false) {
+        SignUpScreen(
+            state = SignUpScreenState(
+                firstName = "Akhil",
+                lastName = "S",
+                email = "akhil@gmail.com",
+                password = "1234As%343",
+                passwordConfirm = "1234As",
+                checkBox = false,
+                isBadFirstName = false,
+                isBadLastName = false,
+                isBadEmail = false,
+                isBadPassword = false,
+                isBadPasswordConfirm = false,
+            ), events = null, navigateToSignUpScreen = null
+        )
+    }
+}
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES, name = "DefaultPreviewDark", showBackground = true
+)
+@Composable
+fun DefaultPreviewSignUpScreenDark() {
+    AppTheme(useDarkTheme = true) {
+        SignUpScreen(
+            state = SignUpScreenState(
+                firstName = "Akhil",
+                lastName = "S",
+                email = "akhil@gmail.com",
+                password = "1234As%343",
+                passwordConfirm = "1234As",
+                checkBox = false,
+                isBadFirstName = false,
+                isBadLastName = false,
+                isBadEmail = false,
+                isBadPassword = false,
+                isBadPasswordConfirm = false,
+            ), events = null, navigateToSignUpScreen = null
+        )
+    }
 }

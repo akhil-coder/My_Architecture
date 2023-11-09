@@ -6,7 +6,6 @@ dependencies {
     "implementation"(Compose.activity)
     "implementation"(Compose.ui)
     "implementation"(Compose.tooling)
-    "implementation"(Compose.material)
     "implementation"(Compose.liveDataRuntime)
 
     "testImplementation"(TestImplementation.junit)
