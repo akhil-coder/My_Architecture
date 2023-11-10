@@ -40,8 +40,7 @@ fun MyMoviesScreen(
     val scope = rememberCoroutineScope()
 
     val tabList = listOf(
-        TabViewItem(
-            id = "favorite",
+        TabViewItem(id = "favorite",
             title = stringResource(R.string.favorite),
             icon = Icons.Default.Favorite,
             screenComponent = {
@@ -49,16 +48,12 @@ fun MyMoviesScreen(
                     imageLoader = imageLoader,
                     state = stateFav,
                     event = eventFav,
-                    openDrawer = { openDrawer() }
+                    openDrawer = openDrawer,
                 )
-            }
-        ),
-        TabViewItem(
-            id = "watchedList",
+            }), TabViewItem(id = "watchedList",
             title = stringResource(R.string.watched),
             icon = Icons.Default.Tv,
-            screenComponent = { WatchListScreen() }
-        )
+            screenComponent = { WatchListScreen() })
     )
 
     BackHandler(pagerState.currentPage != 0) {
@@ -67,24 +62,19 @@ fun MyMoviesScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(R.string.my_movies), color = Color.White)
-                },
-                navigationIcon = {
-                    IconButton(onClick = popBack) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back pressed",
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
-        }
-    ) {
+    Scaffold(topBar = {
+        TopAppBar(title = {
+            Text(text = stringResource(R.string.my_movies), color = Color.White)
+        }, navigationIcon = {
+            IconButton(onClick = popBack) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back pressed",
+                    tint = Color.White
+                )
+            }
+        })
+    }) {
 
         Column(
             modifier = Modifier.fillMaxSize()

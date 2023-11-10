@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,20 +43,21 @@ fun ListingScreen(
     imageLoader: ImageLoader,
     networkStatus: MutableState<Boolean>,
     state: ListingUiState,
-    event: (HomeUiEvents) -> Unit,
+    event: (ListingScreenUiEvents) -> Unit,
     navigateToTvShows: () -> Unit,
-    openDrawer: () -> Unit
+    openDrawer: () -> Unit,
 ) {
 
     SDUIDisplayManager.navigateToTvShows = navigateToTvShows
 
-    DefaultScreenUI(networkStatus = networkStatus.value,
+    DefaultScreenUI(
+        networkStatus = networkStatus.value,
+        openDrawer = openDrawer,
         queue = state.errorQueue,
         onRemoveHeadFromQueue = {
-            event(HomeUiEvents.OnRemoveHeadFromQueue)
+            event(ListingScreenUiEvents.OnRemoveHeadFromQueue)
         },
         progressBarState = state.progressBarState,
-        openDrawer = { openDrawer() },
         content = {
             Box(
                 modifier = Modifier
@@ -79,7 +79,9 @@ fun ListingScreen(
                     }
                 }
             }
-        })
+        },
+        drawerEnable = false
+    )
 }
 
 @Composable

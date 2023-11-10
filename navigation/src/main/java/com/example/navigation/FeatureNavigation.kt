@@ -13,6 +13,6 @@ interface FeatureNavigation {
         imageLoader: ImageLoader,
         width: Int,
         networkStatus: MutableState<Boolean>,
-        openDrawer: () -> Unit = {}
+        openDrawer: () -> Unit,
     )
 }

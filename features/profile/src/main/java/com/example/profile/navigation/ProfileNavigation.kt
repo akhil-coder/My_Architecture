@@ -24,7 +24,8 @@ class ProfileNavigationImpl : ProfileNavigation {
             navGraphBuilder,
             imageLoader,
             width,
-            networkStatus
+            networkStatus,
+            openDrawer
         )
     }
 }

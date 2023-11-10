@@ -33,26 +33,27 @@ fun FavoriteScreen(
     imageLoader: ImageLoader,
     state: FavoriteState,
     event: (FavoriteEvents) -> Unit,
-    openDrawer: () -> Unit
+    openDrawer: () -> Unit,
 ) {
 
     DefaultScreenUI(
+        openDrawer = openDrawer,
         queue = state.errorQueue,
         onRemoveHeadFromQueue = {
             event(FavoriteEvents.OnRemoveHeadFromQueue)
         },
-        progressBarState = state.progressBarState,
-        onSnackBarAction = {
+        progressBarState = state.progressBarState, onSnackBarAction = {
             event(FavoriteEvents.RestoreFavorite)
         },
         content = {
-
             movieList(
                 state,
                 imageLoader = imageLoader,
                 event
             )
-        }, openDrawer = { openDrawer() })
+        },
+        drawerEnable = false
+    )
 }
 
 @OptIn(ExperimentalMaterialApi::class)

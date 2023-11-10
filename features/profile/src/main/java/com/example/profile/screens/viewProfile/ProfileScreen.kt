@@ -35,7 +35,7 @@ fun ProfileScreen(
     imageLoader: ImageLoader,
     networkStatus: MutableState<Boolean>,
     navigateToProfileEditsScreen: () -> Unit,
-    openDrawer: () -> Unit
+    openDrawer: () -> Unit,
 ) {
 
     var menuExpanded = remember {
@@ -50,9 +50,10 @@ fun ProfileScreen(
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia(),
             onResult = { uri -> selectedImageUri = uri })
 
-    DefaultScreenUI(networkStatus = networkStatus.value,
+    DefaultScreenUI(
+        networkStatus = networkStatus.value,
         appBar = { CustomAppBar(menuExpanded) },
-        openDrawer = { openDrawer() },
+        openDrawer = openDrawer,
         content = {
 
             Column(modifier = Modifier.padding(12.dp)) {
@@ -96,7 +97,9 @@ fun ProfileScreen(
 
             }
 
-        })
+        },
+        drawerEnable = false
+    )
     if (menuExpanded.value) ShowPopUpMenuDialog(menuExpanded, navigateToProfileEditsScreen)
 }
 
@@ -144,27 +147,27 @@ fun ShowPopUpMenuDialog(
             }, modifier = Modifier.width(140.dp)
         ) {
 
-          /*  items.forEachIndexed { index, itemText ->
-                DropdownMenuItem(onClick = {
-                    expanded = false
-                    menuExpanded.value = false
-                    when (itemText) {
-                        "Edit" -> navigateToProfileEditsScreen()
-                    }
-                }) {
+            /*  items.forEachIndexed { index, itemText ->
+                  DropdownMenuItem(onClick = {
+                      expanded = false
+                      menuExpanded.value = false
+                      when (itemText) {
+                          "Edit" -> navigateToProfileEditsScreen()
+                      }
+                  }) {
 
-                    Icon(
-                        imageVector = when (itemText) {
-                            "Edit" -> Icons.Default.Edit
-                            else -> Icons.Default.Edit
-                        }, contentDescription = "Icons", tint = Color.LightGray
-                    )
+                      Icon(
+                          imageVector = when (itemText) {
+                              "Edit" -> Icons.Default.Edit
+                              else -> Icons.Default.Edit
+                          }, contentDescription = "Icons", tint = Color.LightGray
+                      )
 
-                    Text(
-                        text = itemText, modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
-            }*/
+                      Text(
+                          text = itemText, modifier = Modifier.padding(start = 4.dp)
+                      )
+                  }
+              }*/
 
         }
 

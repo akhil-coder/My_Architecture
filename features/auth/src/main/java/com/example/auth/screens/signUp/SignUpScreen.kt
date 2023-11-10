@@ -24,7 +24,6 @@ import com.example.components.text.MyTextFieldComponent
 import com.example.components.text.NormalTestComponent
 import com.example.components.text.PasswordTextFieldComponent
 import com.example.components.theme.AppTheme
-import com.example.domain.model.user.SignUpScreenState
 
 @Composable
 fun SignUpScreen(

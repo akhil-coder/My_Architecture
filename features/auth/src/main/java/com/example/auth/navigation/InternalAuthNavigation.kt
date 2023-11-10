@@ -14,6 +14,7 @@ import com.example.auth.screens.signUp.SignUpViewModel
 import com.example.navigation.FeatureNavigation
 import com.example.navigation.GraphRoute
 import com.example.navigation.screens.AuthScreen
+import com.example.navigation.screens.MainScreen
 import com.example.navigation.screens.MovieScreen
 import com.google.accompanist.navigation.animation.composable
 
@@ -37,7 +38,7 @@ internal object InternalAuthNavigation : FeatureNavigation {
             ) {
                 val viewModel = hiltViewModel<SignInViewModel>()
 
-                SignInScreen(
+                SignInScreen(networkStatus = networkStatus,
                     state = viewModel.screenState.value,
                     events = viewModel::onTriggerEvent,
                     navigateToMovieListsScreen = {
@@ -46,8 +47,7 @@ internal object InternalAuthNavigation : FeatureNavigation {
                                 inclusive = true
                             }
                         }
-                    }
-                ) {
+                    }) {
                     navController.navigate(route = AuthScreen.SignUp.route) {
                         popUpTo(route = AuthScreen.SignIn.route) {
                             inclusive = false
@@ -65,8 +65,8 @@ internal object InternalAuthNavigation : FeatureNavigation {
                     state = viewModel.screenState.value,
                     events = viewModel::onTriggerEvent,
                 ) {
-                    navController.navigate(route = MovieScreen.MovieList.route) {
-                        popUpTo(route = AuthScreen.Login.route) {
+                    navController.navigate(route = MainScreen.HomeScreen.route) {
+                        popUpTo(route = AuthScreen.SignUp.route) {
                             inclusive = true
                         }
                     }

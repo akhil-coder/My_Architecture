@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.example.components.regex.RegexCredentialsValidator
 import com.example.core.util.Logger
 import com.example.core.util.exhaustive
-import com.example.domain.model.user.SignUpScreenState
 import com.example.preferences.BasePreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

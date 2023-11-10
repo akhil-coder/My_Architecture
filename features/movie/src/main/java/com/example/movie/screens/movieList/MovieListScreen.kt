@@ -92,19 +92,21 @@ fun MovieListScreen(
         }
     }
 
-    DefaultScreenUI(networkStatus = networkStatus.value,
+    DefaultScreenUI(
+        networkStatus = networkStatus.value,
+        openDrawer = openDrawer,
         queue = state.errorQueue,
         onRemoveHeadFromQueue = {
             event(MovieListEvents.OnRemoveHeadFromQueue)
         },
         progressBarState = state.progressBarState,
         content = {
-
             MovieList(
                 state, imageLoader = imageLoader, navigateToDetailsScreen, event
             )
         },
-        openDrawer = { openDrawer() })
+        drawerEnable = false
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)

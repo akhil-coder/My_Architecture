@@ -6,8 +6,7 @@ import androidx.navigation.NavHostController
 import coil.ImageLoader
 import com.example.navigation.FeatureNavigation
 
-interface AuthNavigation : FeatureNavigation {
-}
+interface AuthNavigation : FeatureNavigation {}
 
 class AuthNavigationImpl : AuthNavigation {
     override fun registerGraph(
@@ -18,6 +17,8 @@ class AuthNavigationImpl : AuthNavigation {
         networkStatus: MutableState<Boolean>,
         openDrawer: () -> Unit
     ) {
-        InternalAuthNavigation.registerGraph(navController, navGraphBuilder, imageLoader, width, networkStatus)
+        InternalAuthNavigation.registerGraph(
+            navController, navGraphBuilder, imageLoader, width, networkStatus, openDrawer
+        )
     }
 }

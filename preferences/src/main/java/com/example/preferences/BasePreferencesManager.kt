@@ -1,13 +1,11 @@
 package com.example.preferences
 
-import com.example.domain.model.user.SignInScreenState
-import com.example.domain.model.user.SignUpScreenState
 import kotlinx.coroutines.flow.Flow
 
 interface BasePreferencesManager {
 
-    fun getUser(): Flow<SignUpScreenState>
-    suspend fun setUser(signUpState: SignInScreenState)
+//    fun getUser(): Flow<com.example.auth.screens.signUp.SignUpScreenState>
+//    suspend fun setUser(signUpState: com.example.auth.screens.signIn.SignInScreenState)
 
     fun getTheme(): Flow<Boolean>
     suspend fun setTheme(isDarkTheme: Boolean)

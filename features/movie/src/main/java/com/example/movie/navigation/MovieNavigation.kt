@@ -23,7 +23,8 @@ class MovieNavigationImpl : MovieNavigation {
             navGraphBuilder,
             imageLoader,
             width,
-            networkStatus
+            networkStatus,
+            openDrawer
         )
     }
 }

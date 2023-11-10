@@ -29,13 +29,13 @@ class ListingScreenViewModel @Inject constructor(
     val listingUiState: State<ListingUiState> = _listingUiState
 
     init {
-        onEventChange(event = HomeUiEvents.GetHomeUi)
+        onEventChange(event = ListingScreenUiEvents.GetHomeUi)
     }
 
-    fun onEventChange(event: HomeUiEvents) {
+    fun onEventChange(event: ListingScreenUiEvents) {
         when (event) {
-            is HomeUiEvents.GetHomeUi -> getHomeUi()
-            is HomeUiEvents.OnRemoveHeadFromQueue -> {
+            is ListingScreenUiEvents.GetHomeUi -> getHomeUi()
+            is ListingScreenUiEvents.OnRemoveHeadFromQueue -> {
                 try {
                     val queue = listingUiState.value.errorQueue
                     queue.remove()
@@ -95,7 +95,7 @@ class ListingScreenViewModel @Inject constructor(
     }
 }
 
-sealed class HomeUiEvents {
-    object GetHomeUi : HomeUiEvents()
-    object OnRemoveHeadFromQueue : HomeUiEvents()
+sealed class ListingScreenUiEvents {
+    object GetHomeUi : ListingScreenUiEvents()
+    object OnRemoveHeadFromQueue : ListingScreenUiEvents()
 }

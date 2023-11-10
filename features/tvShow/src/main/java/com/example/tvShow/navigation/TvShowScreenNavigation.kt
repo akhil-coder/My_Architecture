@@ -6,8 +6,7 @@ import androidx.navigation.NavHostController
 import coil.ImageLoader
 import com.example.navigation.FeatureNavigation
 
-interface TvShowScreenNavigation : FeatureNavigation {
-}
+interface TvShowScreenNavigation : FeatureNavigation {}
 
 class TvShowScreenNavigationImpl : TvShowScreenNavigation {
     override fun registerGraph(
@@ -16,15 +15,10 @@ class TvShowScreenNavigationImpl : TvShowScreenNavigation {
         imageLoader: ImageLoader,
         width: Int,
         networkStatus: MutableState<Boolean>,
-        openDrawer: () -> Unit
+        openDrawer: () -> Unit,
     ) {
         InternalTvShowScreenNavigation.registerGraph(
-            navController,
-            navGraphBuilder,
-            imageLoader,
-            width,
-            networkStatus,
-            openDrawer
+            navController, navGraphBuilder, imageLoader, width, networkStatus, openDrawer
         ) // This one.
     }
 }

@@ -52,13 +52,14 @@ fun TvShowListScreen(
     viewModel: TvShowListViewModel,
     openDrawer: () -> Unit
 ) {
-    DefaultScreenUI(networkStatus = networkStatus.value,
+    DefaultScreenUI(
+        networkStatus = networkStatus.value,
+        openDrawer = openDrawer,
         queue = state.errorQueue,
         onRemoveHeadFromQueue = {
             event(TvShowListEvents.OnRemoveHeadFromQueue)
         },
         progressBarState = state.progressBarState,
-        openDrawer = { openDrawer() },
         content = {
             TvShowList(
                 viewModel = viewModel,
@@ -66,9 +67,11 @@ fun TvShowListScreen(
                 imageLoader = imageLoader,
                 navigateToDetailsScreen = navigateToDetailsScreen,
                 event = event,
-                savedStateHandle = savedStateHandle
+                savedStateHandle = savedStateHandle,
             )
-        })
+        },
+        drawerEnable = false
+    )
     viewModel.printData()
 }
 

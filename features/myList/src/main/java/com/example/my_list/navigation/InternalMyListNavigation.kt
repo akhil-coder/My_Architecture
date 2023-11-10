@@ -27,8 +27,7 @@ internal object InternalMyListNavigation : FeatureNavigation {
     ) {
 
         navGraphBuilder.navigation(
-            startDestination = MyMoviesScreen.MyMovies.route,
-            route = GraphRoute.myListRoute
+            startDestination = MyMoviesScreen.MyMovies.route, route = GraphRoute.myListRoute
         ) {
 
             composable(
@@ -44,7 +43,7 @@ internal object InternalMyListNavigation : FeatureNavigation {
                     imageLoader = imageLoader,
                     stateFav = favoriteViewModel.favoriteState.value,
                     eventFav = favoriteViewModel::onEventChange,
-                    openDrawer = { openDrawer() }
+                    openDrawer = openDrawer
                 )
             }
 
