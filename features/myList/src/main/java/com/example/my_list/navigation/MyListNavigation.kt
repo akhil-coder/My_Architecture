@@ -6,8 +6,7 @@ import androidx.navigation.NavHostController
 import coil.ImageLoader
 import com.example.navigation.FeatureNavigation
 
-interface MyListNavigation : FeatureNavigation {
-}
+interface MyListNavigation : FeatureNavigation {}
 
 class MyListNavigationImpl : MyListNavigation {
     override fun registerGraph(
@@ -19,11 +18,7 @@ class MyListNavigationImpl : MyListNavigation {
         openDrawer: () -> Unit
     ) {
         InternalMyListNavigation.registerGraph(
-            navController,
-            navGraphBuilder,
-            imageLoader,
-            width,
-            networkStatus
+            navController, navGraphBuilder, imageLoader, width, networkStatus, openDrawer
         )
     }
 }

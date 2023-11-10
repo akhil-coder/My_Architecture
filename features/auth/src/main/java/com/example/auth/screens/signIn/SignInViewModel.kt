@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.components.regex.RegexCredentialsValidator
 import com.example.core.util.Logger
 import com.example.core.util.exhaustive
-import com.example.domain.model.user.SignInScreenState
 import com.example.preferences.BasePreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -36,7 +35,7 @@ class SignInViewModel @Inject constructor(
 
     private fun setUserDetails(userDetails: SignInScreenState) {
         viewModelScope.launch {
-            basePreferencesManager.setUser(userDetails)
+//            basePreferencesManager.setUser(userDetails)
         }
     }
 

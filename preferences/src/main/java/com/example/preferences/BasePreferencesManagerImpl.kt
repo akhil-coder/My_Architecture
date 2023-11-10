@@ -8,8 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.domain.model.user.SignInScreenState
-import com.example.domain.model.user.SignUpScreenState
+
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
@@ -32,22 +31,22 @@ class BasePreferencesManagerImpl constructor(
         val USER_DETAILS_PASSWORD = stringPreferencesKey("user_details_password")
 
     }
+// TODO: Update the object
+//    override fun getUser() = context.dataStore.data.catch { exception ->
+//        if (exception is IOException) emit(emptyPreferences())
+//        else throw exception
+//    }.map { preferences ->
+//        val userName = preferences[USER_DETAILS_USERNAME] ?: ""
+//        val password = preferences[USER_DETAILS_PASSWORD] ?: ""
+//        com.example.auth.screens.signUp.SignUpScreenState(email = userName, password = password)
+//    }
 
-    override fun getUser() = context.dataStore.data.catch { exception ->
-        if (exception is IOException) emit(emptyPreferences())
-        else throw exception
-    }.map { preferences ->
-        val userName = preferences[USER_DETAILS_USERNAME] ?: ""
-        val password = preferences[USER_DETAILS_PASSWORD] ?: ""
-        SignUpScreenState(email = userName, password = password)
-    }
-
-    override suspend fun setUser(signInState: SignInScreenState) {
-        context.dataStore.edit { preferences ->
-            preferences[USER_DETAILS_USERNAME] = signInState.email!!
-            preferences[USER_DETAILS_PASSWORD] = signInState.password!!
-        }
-    }
+//    override suspend fun setUser(signInState: com.example.auth.screens.signIn.SignInScreenState) {
+//        context.dataStore.edit { preferences ->
+//            preferences[USER_DETAILS_USERNAME] = signInState.email!!
+//            preferences[USER_DETAILS_PASSWORD] = signInState.password!!
+//        }
+//    }
 
     override fun getTheme() = context.dataStore.data.catch { exception ->
         if (exception is IOException) {

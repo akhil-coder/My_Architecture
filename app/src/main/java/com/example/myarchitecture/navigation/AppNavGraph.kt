@@ -9,7 +9,6 @@ import androidx.navigation.NavHostController
 import coil.ImageLoader
 import com.example.navigation.GraphRoute
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import kotlinx.coroutines.Job
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -19,7 +18,7 @@ fun AppNavGraph(
     navigationProvider: NavigationProvider,
     networkStatus: MutableState<Boolean>,
     widthSizeClass: WindowWidthSizeClass,
-    openDrawer: () -> Unit = {}
+    openDrawer: () -> Unit,
 ) {
 
     BoxWithConstraints {
@@ -27,7 +26,7 @@ fun AppNavGraph(
         val width = constraints.maxWidth / 2
 
         AnimatedNavHost(
-            navController = navController, startDestination = GraphRoute.uiMainRoute
+            navController = navController, startDestination = GraphRoute.authRoute
         ) {
 
             navigationProvider.uiMainNavigation.registerGraph(
@@ -39,19 +38,19 @@ fun AppNavGraph(
             )
 
             navigationProvider.authNavigation.registerGraph(
-                navController, this, imageLoader, width, networkStatus
+                navController, this, imageLoader, width, networkStatus, openDrawer
             )
 
             navigationProvider.movieNavigation.registerGraph(
-                navController, this, imageLoader, width, networkStatus
+                navController, this, imageLoader, width, networkStatus, openDrawer
             )
 
             navigationProvider.profileNavigation.registerGraph(
-                navController, this, imageLoader, width, networkStatus
+                navController, this, imageLoader, width, networkStatus, openDrawer
             )
 
             navigationProvider.myListNavigation.registerGraph(
-                navController, this, imageLoader, width, networkStatus
+                navController, this, imageLoader, width, networkStatus, openDrawer
             )
 
 
@@ -236,6 +235,4 @@ fun AppNavGraph(
             }*/
         }
     }
-
-
 }

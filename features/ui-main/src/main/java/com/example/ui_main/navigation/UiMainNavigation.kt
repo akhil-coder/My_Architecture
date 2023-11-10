@@ -18,8 +18,15 @@ class UiMainNavigationImpl : UiMainNavigation {
         imageLoader: ImageLoader,
         width: Int,
         networkStatus: MutableState<Boolean>,
-        openDrawer: () -> Unit
+        openDrawer: () -> Unit,
     ) {
-        InternalUiMainNavigation.registerGraph(navController, navGraphBuilder, imageLoader, width, networkStatus, openDrawer)
+        InternalUiMainNavigation.registerGraph(
+            navController,
+            navGraphBuilder,
+            imageLoader,
+            width,
+            networkStatus,
+            openDrawer
+        )
     }
 }

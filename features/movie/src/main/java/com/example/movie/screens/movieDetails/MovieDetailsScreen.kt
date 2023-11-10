@@ -40,13 +40,14 @@ fun MovieDetailsScreen(
     networkStatus: MutableState<Boolean>,
     state: MovieDetailsState,
     event: (MovieDetailsEvents) -> Unit,
+    openDrawer: () -> Unit,
     backWithResult: (Map<String, Any>?) -> Unit,
-    openDrawer: () -> Unit
 ) {
 
     DefaultScreenUI(
         networkStatus = networkStatus.value,
         appBar = { CustomAppBar(state, event, backWithResult) },
+        openDrawer = openDrawer,
         queue = state.errorQueue,
         onRemoveHeadFromQueue = {
             event(MovieDetailsEvents.OnRemoveHeadFromQueue)
@@ -54,12 +55,10 @@ fun MovieDetailsScreen(
         progressBarState = state.progressBarState,
         content = {
             movieDetail(
-                state,
-                imageLoader = imageLoader,
-                event
+                state, imageLoader = imageLoader, event
             )
         },
-        openDrawer = { openDrawer() }
+        drawerEnable = false
     )
 }
 
@@ -71,51 +70,44 @@ fun CustomAppBar(
     backWithResult: (Map<String, Any>?) -> Unit
 ) {
 
-    TopAppBar(
-        title = {
-            Text(text = stringResource(R.string.movie_Details), color = Color.White)
-        },
-        actions = {
-            IconButton(
-                onClick = {
-                    if (state.isFavorite) {
-                        event(MovieDetailsEvents.RemoveFromFavorite)
-                    } else {
-                        event(MovieDetailsEvents.AddToFavorite)
-                    }
-                }
-            ) {
-                Icon(
-                    imageVector = if (state.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = "Favorite",
-                    tint = Color.Red.copy(alpha = 0.6f)
-                )
+    TopAppBar(title = {
+        Text(text = stringResource(R.string.movie_Details), color = Color.White)
+    }, actions = {
+        IconButton(onClick = {
+            if (state.isFavorite) {
+                event(MovieDetailsEvents.RemoveFromFavorite)
+            } else {
+                event(MovieDetailsEvents.AddToFavorite)
             }
-        },
-        navigationIcon = {
-            IconButton(onClick = {
-                backWithResult(
-                    mapOf(
-                        "resultData" to "my result data"
-                    )
+        }) {
+            Icon(
+                imageVector = if (state.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = "Favorite",
+                tint = Color.Red.copy(alpha = 0.6f)
+            )
+        }
+    }, navigationIcon = {
+        IconButton(onClick = {
+            backWithResult(
+                mapOf(
+                    "resultData" to "my result data"
                 )
-            }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back pressed",
-                    tint = Color.White
-                )
-            }
-        })
+            )
+        }) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Back pressed",
+                tint = Color.White
+            )
+        }
+    })
 }
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun movieDetail(
-    state: MovieDetailsState,
-    imageLoader: ImageLoader,
-    event: (MovieDetailsEvents) -> Unit
+    state: MovieDetailsState, imageLoader: ImageLoader, event: (MovieDetailsEvents) -> Unit
 ) {
 
 
@@ -127,10 +119,8 @@ fun movieDetail(
         ) {
 
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(it.posterPath)
-                    .crossfade(true)
-                    .build(),
+                model = ImageRequest.Builder(LocalContext.current).data(it.posterPath)
+                    .crossfade(true).build(),
                 contentDescription = "poster",
                 imageLoader = imageLoader,
                 contentScale = ContentScale.FillBounds,

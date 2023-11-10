@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.components.DefaultScreenUI
 import com.example.components.R
 import com.example.components.text.ButtonComponent
 import com.example.components.text.ClickableLoginTextComponent
@@ -24,14 +26,37 @@ import com.example.components.text.NormalTestComponent
 import com.example.components.text.PasswordTextFieldComponent
 import com.example.components.text.UnderLinedTestComponent
 import com.example.components.theme.AppTheme
-import com.example.domain.model.user.SignInScreenState
 
 @Composable
 fun SignInScreen(
-    state: SignInScreenState?,
+    networkStatus: MutableState<Boolean>?,
+    state: SignInScreenState,
     events: ((SignInUIEvents) -> Unit)?,
     navigateToMovieListsScreen: (() -> Unit)?,
     navigateToSignUpScreen: (() -> Unit)?,
+) {
+
+    DefaultScreenUI(drawerEnable = false,
+        networkStatus = networkStatus?.value ?: true,
+        queue = state.errorQueue,
+        onRemoveHeadFromQueue = {
+            if (events != null) {
+                events(SignInUIEvents.OnRemoveHeadFromQueue)
+            }
+        },
+        progressBarState = state.progressBarState,
+        openDrawer = null,
+        content = {
+            SignIn(events, state, navigateToMovieListsScreen, navigateToSignUpScreen)
+        })
+}
+
+@Composable
+private fun SignIn(
+    events: ((SignInUIEvents) -> Unit)?,
+    state: SignInScreenState?,
+    navigateToMovieListsScreen: (() -> Unit)?,
+    navigateToSignUpScreen: (() -> Unit)?
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
@@ -40,7 +65,7 @@ fun SignInScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 18.dp),
-            ) {
+        ) {
             NormalTestComponent(value = stringResource(R.string.signIn))
 
             HeadingTestComponent(value = stringResource(R.string.welcome_back))
@@ -96,7 +121,7 @@ fun SignInScreen(
 @Composable
 fun LoginScreenPreview() {
     SignInScreen(
-        state = SignInScreenState(
+        networkStatus = null, state = SignInScreenState(
             email = "Akhil@gmail.com",
             password = "123456567",
             isBadEmail = false,
@@ -105,7 +130,6 @@ fun LoginScreenPreview() {
     )
 }
 
-
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES, name = "DefaultPreviewDark", showBackground = true
 )
@@ -113,7 +137,7 @@ fun LoginScreenPreview() {
 fun LoginScreenPreviewDark() {
     AppTheme(true) {
         SignInScreen(
-            state = SignInScreenState(
+            networkStatus = null, state = SignInScreenState(
                 email = "Akhil@gmail.com",
                 password = "123456567",
                 isBadEmail = false,
@@ -121,7 +145,6 @@ fun LoginScreenPreviewDark() {
             ), events = null, navigateToMovieListsScreen = null, navigateToSignUpScreen = null
         )
     }
-
 }
 
 

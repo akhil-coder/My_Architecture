@@ -27,8 +27,7 @@ internal object InternalProfileNavigation : FeatureNavigation {
     ) {
 
         navGraphBuilder.navigation(
-            startDestination = ProfileScreen.Profile.route,
-            route = GraphRoute.profileRoute
+            startDestination = ProfileScreen.Profile.route, route = GraphRoute.profileRoute
         ) {
 
             composable(
@@ -40,7 +39,7 @@ internal object InternalProfileNavigation : FeatureNavigation {
                     navigateToProfileEditsScreen = {
                         navController.navigate(route = ProfileScreen.ProfileEdit.route)
                     },
-                    openDrawer = { openDrawer() }
+                    openDrawer = openDrawer
                 )
             }
 

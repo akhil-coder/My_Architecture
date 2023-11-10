@@ -31,30 +31,24 @@ internal object InternalMovieNavigation : FeatureNavigation {
     ) {
 
         navGraphBuilder.navigation(
-            startDestination = MovieScreen.MovieList.route,
-            route = GraphRoute.movieRoute
+            startDestination = MovieScreen.MovieList.route, route = GraphRoute.movieRoute
         ) {
 
-            composable(
-                route = MovieScreen.MovieList.route,
-                exitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { -width },
-                        animationSpec = tween(
-                            durationMillis = 300,
-                        )
-                    ) + fadeOut(animationSpec = tween(durationMillis = 300))
-                },
+            composable(route = MovieScreen.MovieList.route, exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -width }, animationSpec = tween(
+                        durationMillis = 300,
+                    )
+                ) + fadeOut(animationSpec = tween(durationMillis = 300))
+            },
 
                 popEnterTransition = {
                     slideInHorizontally(
-                        initialOffsetX = { -width },
-                        animationSpec = tween(
+                        initialOffsetX = { -width }, animationSpec = tween(
                             durationMillis = 300,
                         )
                     ) + fadeIn(animationSpec = tween(durationMillis = 300))
-                }
-            ) {
+                }) {
 
                 val movieListViewModel = hiltViewModel<MovieListViewModel>()
                 Log.e("Network::", "composable : $networkStatus ")
@@ -67,17 +61,15 @@ internal object InternalMovieNavigation : FeatureNavigation {
                         navController.navigate(route = "${MovieScreen.MovieDetail.route}/$id")
                     },
                     savedStateHandle = navController.currentBackStackEntry?.savedStateHandle,
-                    openDrawer = { openDrawer() }
+                    openDrawer = openDrawer
                 )
             }
 
-            composable(
-                route = MovieScreen.MovieDetail.route + "/{movieId}",
+            composable(route = MovieScreen.MovieDetail.route + "/{movieId}",
                 arguments = MovieScreen.MovieDetail.arguments,
                 enterTransition = {
                     slideInHorizontally(
-                        initialOffsetX = { width },
-                        animationSpec = tween(
+                        initialOffsetX = { width }, animationSpec = tween(
                             durationMillis = 300,
                         )
                     ) + fadeIn(animationSpec = tween(durationMillis = 300))
@@ -85,20 +77,18 @@ internal object InternalMovieNavigation : FeatureNavigation {
 
                 popExitTransition = {
                     slideOutHorizontally(
-                        targetOffsetX = { width },
-                        animationSpec = tween(
+                        targetOffsetX = { width }, animationSpec = tween(
                             durationMillis = 300,
                         )
                     ) + fadeOut(animationSpec = tween(durationMillis = 300))
-                }
-            ) { navBackStack ->
+                }) { navBackStack ->
                 //val id = navBackStack.arguments?.getString("movieId") ?: ""
                 val movieDetailsViewModel = hiltViewModel<MovieDetailsViewModel>()
-                MovieDetailsScreen(
-                    imageLoader = imageLoader,
+                MovieDetailsScreen(imageLoader = imageLoader,
                     networkStatus = networkStatus,
                     state = movieDetailsViewModel.detailsState.value,
                     event = movieDetailsViewModel::onEventChange,
+                    openDrawer = openDrawer,
                     backWithResult = { data ->
                         if (data != null) {
                             navController.previousBackStackEntry?.savedStateHandle?.let {
@@ -108,9 +98,7 @@ internal object InternalMovieNavigation : FeatureNavigation {
                             }
                         }
                         navController.popBackStack()
-                    },
-                    openDrawer = { openDrawer() }
-                )
+                    })
             }
 
         }

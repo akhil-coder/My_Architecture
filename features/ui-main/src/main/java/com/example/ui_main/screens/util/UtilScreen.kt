@@ -57,7 +57,9 @@ fun UtilScreen(
         bitmap.value = it
     }
 
-    DefaultScreenUI(queue = state.errorQueue,
+    DefaultScreenUI(
+        openDrawer = openDrawer,
+        queue = state.errorQueue,
         permissionQueue = state.permissionQueue,
         onRemoveHeadFromQueue = {
             event(UtilEvents.OnRemoveHeadFromQueue)
@@ -103,7 +105,8 @@ fun UtilScreen(
             }
 */
         },
-        openDrawer = { openDrawer() })
+        drawerEnable = false
+    )
 }
 
 

@@ -1,4 +1,4 @@
-package com.example.domain.model.user
+package com.example.auth.screens.signUp
 
 data class SignUpScreenState(
     var firstName: String? = null,

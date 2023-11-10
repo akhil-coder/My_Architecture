@@ -7,7 +7,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,10 +22,8 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.app.ActivityCompat
@@ -38,10 +35,7 @@ import com.example.components.util.ConnectivityMonitor
 import com.example.core.domain.ProgressBarState
 import com.example.core.domain.Queue
 import com.example.core.domain.UIComponent
-import com.example.core.util.exhaustive
 import com.example.navigation.network.ConnectivityObserver
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +45,7 @@ fun DefaultScreenUI(
     networkStatus: Boolean = true,
     appBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
+    openDrawer: (() -> Unit)?,
     queue: Queue<UIComponent> = Queue(mutableListOf()),
     permissionQueue: Queue<String> = Queue(mutableListOf()),
     onRemoveHeadFromQueue: () -> Unit = {},
@@ -59,7 +54,7 @@ fun DefaultScreenUI(
     progressBarState: ProgressBarState = ProgressBarState.Idle,
     onSnackBarAction: () -> Unit = {},
     content: @Composable () -> Unit,
-    openDrawer: () -> Unit
+    drawerEnable: Boolean = true,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -70,14 +65,13 @@ fun DefaultScreenUI(
 
 
     Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            HomeTopAppBar(
-                openDrawer = openDrawer,
-                topAppBarState = topAppBarState
-            )
-        },
-        bottomBar = bottomBar
+        scaffoldState = scaffoldState, topBar = {
+            if (drawerEnable) {
+                HomeTopAppBar(
+                    topAppBarState = topAppBarState, openDrawer = openDrawer!!
+                )
+            }
+        }, bottomBar = bottomBar
     ) {
         Box(
             modifier = Modifier
@@ -93,8 +87,7 @@ fun DefaultScreenUI(
                 queue.peek()?.let { uiComponent ->
                     if (uiComponent is UIComponent.Dialog) {
                         GenericDialog(
-                            modifier = Modifier
-                                .fillMaxWidth(0.9f),
+                            modifier = Modifier.fillMaxWidth(0.9f),
                             title = uiComponent.title,
                             description = uiComponent.description,
                             onRemoveHeadFromQueue = onRemoveHeadFromQueue
@@ -119,25 +112,23 @@ fun DefaultScreenUI(
             // process the permission
             if (!permissionQueue.isEmpty()) {
                 permissionQueue.peek()?.let { permission ->
-                    PermissionDialog(
-                        permissionTextProvider = when (permission) {
-                            Manifest.permission.CAMERA -> {
-                                CameraPermissionTextProvider()
-                            }
+                    PermissionDialog(permissionTextProvider = when (permission) {
+                        Manifest.permission.CAMERA -> {
+                            CameraPermissionTextProvider()
+                        }
 
-                            Manifest.permission.RECORD_AUDIO -> {
-                                RecordAudioPermissionTextProvider()
-                            }
+                        Manifest.permission.RECORD_AUDIO -> {
+                            RecordAudioPermissionTextProvider()
+                        }
 
-                            Manifest.permission.CALL_PHONE -> {
-                                PhoneCallPermissionTextProvider()
-                            }
+                        Manifest.permission.CALL_PHONE -> {
+                            PhoneCallPermissionTextProvider()
+                        }
 
-                            else -> return@let
-                        },
+                        else -> return@let
+                    },
                         isPermanentlyDeclined = !ActivityCompat.shouldShowRequestPermissionRationale(
-                            context as Activity,
-                            permission
+                            context as Activity, permission
                         ),
                         onDismiss = { onRemovePermissionFromQueue() },
                         onOkClick = {
@@ -152,8 +143,7 @@ fun DefaultScreenUI(
                             ).let {
                                 context.startActivity(it)
                             }
-                        }
-                    )
+                        })
                 }
             }
 
@@ -173,49 +163,39 @@ fun ShowNetworkStatus(networkState: ConnectivityObserver.Status, scaffoldState: 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeTopAppBar(
-    openDrawer: () -> Unit,
     modifier: Modifier = Modifier,
     topAppBarState: TopAppBarState = rememberTopAppBarState(),
-    scrollBehavior: TopAppBarScrollBehavior? =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    scrollBehavior: TopAppBarScrollBehavior? = TopAppBarDefaults.enterAlwaysScrollBehavior(
+        topAppBarState
+    ),
+    openDrawer: () -> Unit,
 ) {
     val context = LocalContext.current
     val title = "Home Screen"
-    CenterAlignedTopAppBar(
-        title = {
-            Image(
-                painter = painterResource(R.drawable.baseline_temple_buddhist_24),
-                contentDescription = title,
-                contentScale = ContentScale.Inside,
-                modifier = Modifier.fillMaxWidth()
+    CenterAlignedTopAppBar(title = {
+        Text(text = "Celluloid")
+    }, navigationIcon = {
+        IconButton(onClick = {
+            openDrawer()
+        }) {
+            Icon(
+                painter = painterResource(R.drawable.baseline_dehaze_24),
+                contentDescription = "Opens Drawer",
             )
-        },
-        navigationIcon = {
-            IconButton(onClick = {
-                openDrawer()
-            }) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_temple_buddhist_24),
-                    contentDescription = "Opens Drawer",
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = {
-                Toast.makeText(
-                    context,
-                    "Search is not yet implemented in this configuration",
-                    Toast.LENGTH_LONG
-                ).show()
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search"
-                )
-            }
-        },
-        scrollBehavior = scrollBehavior,
-        modifier = modifier
+        }
+    }, actions = {
+        IconButton(onClick = {
+            Toast.makeText(
+                context,
+                "Search is not yet implemented in this configuration",
+                Toast.LENGTH_LONG
+            ).show()
+        }) {
+            Icon(
+                imageVector = Icons.Filled.Search, contentDescription = "Search"
+            )
+        }
+    }, scrollBehavior = scrollBehavior, modifier = modifier
     )
 }
 
